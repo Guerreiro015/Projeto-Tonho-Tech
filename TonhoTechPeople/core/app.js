@@ -88,7 +88,13 @@ function atualizarStatusCloud(texto = null) {
 async function testarCloudInicial() {
   const resultado = await SupabaseService.testarConexao();
   atualizarStatusCloud(resultado.ok ? 'Online' : 'Local');
-  if (!resultado.ok) console.warn('TONHO TECH Cloud:', resultado.mensagem);
+
+  if (resultado.ok) {
+    const syncUsuarios = await SupabaseService.sincronizarUsuariosLocais(obterUsuarios());
+    if (syncUsuarios.ok) console.log('TONHO TECH Cloud:', syncUsuarios.mensagem);
+  } else {
+    console.warn('TONHO TECH Cloud:', resultado.mensagem);
+  }
 }
 
 function normalizarTexto(valor) {
@@ -1145,21 +1151,32 @@ function abrirLogin(forcar = false) {
   document.getElementById('loginOverlay')?.classList.add('show');
 }
 
-function entrarSistema() {
+async function entrarSistema() {
   const usuarioId = document.getElementById('loginUsuario').value;
   const pin = document.getElementById('loginPin').value.trim();
-  const usuario = obterUsuarios().find(u => u.id === usuarioId && u.ativo !== false);
 
-  if (!usuario) {
-    UI.toast('Atenção', 'Usuário não encontrado.');
-    return;
-  }
-  if (pin !== String(usuario.pin)) {
+  const usuarioCloud = await SupabaseService.buscarUsuarioLogin(usuarioId, pin);
+  if (usuarioCloud === false) {
     UI.toast('Atenção', 'PIN inválido.');
     return;
   }
 
-  PortalRH.usuario = { id: usuario.id, nome: usuario.nome, perfil: usuario.perfil, regional: usuario.regional || '', entrada: new Date().toISOString() };
+  if (usuarioCloud) {
+    PortalRH.usuario = usuarioCloud;
+  } else {
+    const usuario = obterUsuarios().find(u => u.id === usuarioId && u.ativo !== false);
+
+    if (!usuario) {
+      UI.toast('Atenção', 'Usuário não encontrado.');
+      return;
+    }
+    if (pin !== String(usuario.pin)) {
+      UI.toast('Atenção', 'PIN inválido.');
+      return;
+    }
+
+    PortalRH.usuario = { id: usuario.id, nome: usuario.nome, perfil: usuario.perfil, regional: usuario.regional || '', entrada: new Date().toISOString(), origem: 'Local' };
+  }
   localStorage.setItem('portal-sessao', JSON.stringify(PortalRH.usuario));
   atualizarUsuarioTela();
   document.getElementById('loginOverlay')?.classList.remove('show');
@@ -1657,7 +1674,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   montarMenus();
   iniciarRelogio();
   registrarEventos();
-  testarCloudInicial();
+  await testarCloudInicial();
   iniciarCommandCenter();
   ColaboradorService.iniciar();
   await carregarBaseLocal();

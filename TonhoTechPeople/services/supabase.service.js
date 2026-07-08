@@ -32,6 +32,20 @@ function dividirEmLotes(lista, tamanho = 500) {
   return lotes;
 }
 
+function perfilParaBanco(perfil) {
+  if (perfil === 'Admin') return 'ADMIN';
+  if (perfil === 'RH/DP') return 'RHDP';
+  if (perfil === 'Suporte Regional') return 'SUPORTE';
+  return String(perfil || '').toUpperCase();
+}
+
+function perfilParaTela(perfil) {
+  if (perfil === 'ADMIN') return 'Admin';
+  if (perfil === 'RHDP') return 'RH/DP';
+  if (perfil === 'SUPORTE') return 'Suporte Regional';
+  return perfil || 'RH/DP';
+}
+
 export const SupabaseService = {
   client: getClient(),
   online: false,
@@ -178,6 +192,81 @@ export const SupabaseService = {
     } catch (erro) {
       console.error('Erro ao salvar solicitação na nuvem:', erro);
       return { ok: false, mensagem: erro.message || 'Erro ao salvar solicitação' };
+    }
+  },
+
+
+  async sincronizarUsuariosLocais(usuarios = []) {
+    if (!this.client) return { ok: false, total: 0, mensagem: 'Supabase indisponível' };
+
+    try {
+      const registros = usuarios
+        .filter(u => u?.id && u?.nome)
+        .map(u => ({
+          nome: String(u.nome || '').trim(),
+          usuario: String(u.id || '').trim(),
+          perfil: perfilParaBanco(u.perfil),
+          regional_nome: u.regional || '',
+          pin: String(u.pin || '1234'),
+          ativo: u.ativo !== false,
+          atualizado_em: new Date().toISOString()
+        }));
+
+      if (!registros.length) return { ok: true, total: 0, mensagem: 'Nenhum usuário para sincronizar' };
+
+      const { error } = await this.client
+        .from('usuarios')
+        .upsert(registros, { onConflict: 'usuario' });
+
+      if (error) throw error;
+      return { ok: true, total: registros.length, mensagem: `${registros.length} usuários sincronizados` };
+    } catch (erro) {
+      console.warn('Não foi possível sincronizar usuários na nuvem:', erro);
+      return { ok: false, total: 0, mensagem: erro.message || 'Falha ao sincronizar usuários' };
+    }
+  },
+
+  async buscarUsuarioLogin(usuarioId, pin) {
+    if (!this.client) return null;
+
+    try {
+      const { data, error } = await this.client
+        .from('usuarios')
+        .select('nome, usuario, perfil, regional_nome, ativo, pin')
+        .eq('usuario', String(usuarioId || '').trim())
+        .eq('ativo', true)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) return null;
+      if (String(data.pin || '') !== String(pin || '')) return false;
+
+      return {
+        id: data.usuario,
+        nome: data.nome,
+        perfil: perfilParaTela(data.perfil),
+        regional: data.regional_nome || '',
+        entrada: new Date().toISOString(),
+        origem: 'Supabase'
+      };
+    } catch (erro) {
+      console.warn('Login cloud indisponível. Usando fallback local:', erro);
+      return null;
+    }
+  },
+
+  async listarRegionais() {
+    if (!this.client) return [];
+    try {
+      const { data, error } = await this.client
+        .from('regionais')
+        .select('nome, ativo')
+        .order('nome', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    } catch (erro) {
+      console.warn('Erro ao listar regionais:', erro);
+      return [];
     }
   },
 

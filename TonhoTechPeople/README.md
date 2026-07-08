@@ -1,46 +1,18 @@
-# TONHO TECH People v3.0
+# TONHO TECH People v3.1
 
-**TONHO TECH**  
-Software & Business Solutions
+Primeira evolução da fase cloud.
 
-Produto: **People**  
-Slogan: **Gestão Inteligente de Pessoas**
+## O que testar
+1. Execute `database/migrations/001_cloud_users.sql` no Supabase.
+2. Abra o sistema pelo Live Server.
+3. Faça login com `Administrador • Admin` e PIN `1234`.
+4. Verifique no Supabase se a tabela `usuarios` recebeu os usuários padrão.
+5. Importe a base Excel e confira `colaboradores` e `regionais`.
 
-## O que há nesta versão
-
-Esta é a primeira versão com fundação cloud usando Supabase.
-
-Ela mantém o funcionamento local e adiciona sincronização inicial com o banco online.
-
-## Fluxo da base Excel
-
-1. Administrador/RH importa a planilha `QUADRO GERAL.xlsm`.
-2. O sistema lê a planilha com SheetJS.
-3. Os dados são salvos localmente no navegador.
-4. O sistema tenta sincronizar os colaboradores com o Supabase.
-5. As regionais da coluna `Folha` são registradas na tabela `regionais`.
-
-## Tabelas esperadas no Supabase
-
-- `regionais`
-- `usuarios`
-- `colaboradores`
-- `solicitacoes`
-
-## Como testar
-
-1. Abra o projeto com Live Server.
-2. Entre com usuário Administrador e PIN `1234`.
-3. Importe a planilha Excel.
-4. Verifique se o indicador **Nuvem** aparece como `Online`.
-5. No Supabase, abra a tabela `colaboradores` e confira se os dados foram gravados.
-6. Gere uma solicitação e confira a tabela `solicitacoes`.
-
-## Modo local
-
-Se o Supabase estiver fora do ar ou a internet falhar, o sistema continua funcionando localmente.
+## Perfis
+- Admin
+- RH/DP
+- Suporte Regional
 
 ## Segurança
-
-Esta versão usa a `anon public key`, própria para uso no navegador.  
-Não use a `service_role key` no frontend.
+A anon public key é usada no frontend. Não use a service_role key no navegador.
