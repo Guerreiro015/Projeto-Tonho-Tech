@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TONHO TECH People v3.0 • Empresa Tonhão Ltda</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+<body>
+  <div id="loader" class="loader-screen">
+    <img class="splash-logo" src="assets/img/tonho-tech-logo-official.png" alt="TONHO TECH People">
+    <div class="splash-progress"><span></span></div>
+    <small>Inicializando plataforma...</small>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo-img" src="assets/img/tonho-tech-logo-official.png" alt="TONHO TECH People">
+        <div><h1>TONHO TECH</h1><span>People<br><small>Gestão Inteligente de Pessoas</small></span></div>
+      </div>
+
+      <nav class="nav-menu" id="menuLateral"></nav>
+
+      <div class="system-status-panel">
+        <div class="status-row ok"><i class="fa-solid fa-circle-check"></i><span>Base</span><strong id="sideStatusBase">Pendente</strong></div>
+        <div class="status-row ok"><i class="fa-solid fa-cloud"></i><span>Nuvem</span><strong id="sideStatusCloud">Testando</strong></div>
+        <div class="status-row ok"><i class="fa-solid fa-shield-halved"></i><span>Auditoria</span><strong>Ativa</strong></div>
+        <div class="status-row warn"><i class="fa-solid fa-bell"></i><span>Pendências</span><strong id="sideStatusPendencias">0</strong></div>
+        <div class="status-row ok"><i class="fa-solid fa-code-branch"></i><span>Versão</span><strong>3.0</strong></div>
+      </div>
+
+      <div class="sidebar-actions">
+        <button id="btnImportar" class="btn-import">
+          <i class="fa-solid fa-file-excel"></i> Importar Base
+        </button>
+        <input id="arquivoExcel" type="file" accept=".xlsx,.xls,.xlsm" hidden />
+        <input id="arquivoBackup" type="file" accept=".json" hidden />
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="tituloTela">Home</h2>
+          <p id="subtituloTela">TONHO TECH People • Plataforma v1.2</p>
+        </div>
+        <div class="topbar-actions">
+          <span id="usuarioLogado" class="user-chip"><i class="fa-solid fa-user"></i> Visitante</span>
+          <button id="btnPesquisaGlobal" class="icon-btn" title="Pesquisa global"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <button id="btnVoltarDashboard" class="icon-btn d-none" title="Voltar à Home"><i class="fa-solid fa-arrow-left"></i></button>
+          <button id="btnTema" class="icon-btn" title="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+          <button id="btnSair" class="icon-btn" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </header>
+
+      <section id="dashboardView" class="view active">
+        <section class="stats-grid">
+          <article class="stat-card"><i class="fa-solid fa-users"></i><div><span>Funcionários</span><strong id="totalFuncionarios">0</strong></div></article>
+          <article class="stat-card"><i class="fa-solid fa-file-signature"></i><div><span>Solicitações Hoje</span><strong id="totalSolicitacoes">0</strong></div></article>
+          <article class="stat-card"><i class="fa-solid fa-clock"></i><div><span>Hora Atual</span><strong id="horaAtual">--:--:--</strong></div></article>
+          <article class="stat-card"><i class="fa-solid fa-database"></i><div><span>Status da Base</span><strong id="statusBase">Não carregada</strong></div></article>
+        </section>
+
+        <section class="enterprise-hero">
+          <div>
+            <span class="enterprise-kicker">TONHO TECH People v3.0</span>
+            <h3 id="saudacaoEnterprise">Bom trabalho.</h3>
+            <p id="resumoEnterprise">Sua central inteligente de rotinas, documentos e histórico de RH.</p>
+          </div>
+          <div class="quick-intel">
+            <div><strong id="intelHoje">0</strong><span>Hoje</span></div>
+            <div><strong id="intelMes">0</strong><span>No mês</span></div>
+            <div><strong id="intelNotificacoes">0</strong><span>Alertas</span></div>
+          </div>
+        </section>
+
+        <section class="section-block meu-dia-panel">
+          <div class="section-title"><i class="fa-solid fa-sun"></i><h3>Meu Dia</h3></div>
+          <div class="meu-dia-grid">
+            <article>
+              <i class="fa-solid fa-file-signature"></i>
+              <div><strong id="meuDiaSolicitacoes">0</strong><span>solicitações hoje</span></div>
+            </article>
+            <article>
+              <i class="fa-solid fa-bell"></i>
+              <div><strong id="meuDiaAlertas">0</strong><span>alertas ativos</span></div>
+            </article>
+            <article>
+              <i class="fa-solid fa-database"></i>
+              <div><strong id="meuDiaBase">Pendente</strong><span>base local</span></div>
+            </article>
+            <article>
+              <i class="fa-solid fa-user-check"></i>
+              <div><strong id="meuDiaUsuario">---</strong><span>usuário conectado</span></div>
+            </article>
+            <article>
+              <i class="fa-solid fa-cloud"></i>
+              <div><strong id="statusCloudHome">Testando</strong><span>nuvem Supabase</span></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block dashboard-alerts">
+          <div class="section-title"><i class="fa-solid fa-triangle-exclamation"></i><h3>Alertas RH</h3></div>
+          <div id="dashboardAlertasGrid" class="alerts-grid"></div>
+        </section>
+
+        <section class="section-block quick-actions-panel">
+          <div class="section-title"><i class="fa-solid fa-bolt-lightning"></i><h3>Ações Rápidas</h3></div>
+          <div class="quick-actions-grid">
+            <button id="quickNovaSolicitacao" class="quick-action"><i class="fa-solid fa-plus"></i><strong>Nova Solicitação</strong><span>Abrir Central de Processos</span></button>
+            <button id="quickPesquisar" class="quick-action"><i class="fa-solid fa-magnifying-glass"></i><strong>Pesquisar</strong><span>Pesquisa Global</span></button>
+            <button id="quickRelatorios" class="quick-action"><i class="fa-solid fa-chart-column"></i><strong>Relatórios</strong><span>Indicadores e CSV</span></button>
+            <button id="quickBackup" class="quick-action"><i class="fa-solid fa-floppy-disk"></i><strong>Backup</strong><span>Configurações</span></button>
+          </div>
+        </section>
+
+        <section class="support-home-panel support-only">
+          <div class="section-title"><i class="fa-solid fa-map-location-dot"></i><h3>Ambiente Suporte Regional</h3></div>
+          <p>Use esta área para importar a base, pesquisar colaboradores da sua regional e gerar solicitações para coleta de assinatura.</p>
+          <div class="support-actions">
+            <button id="supportImportarBase" class="quick-action"><i class="fa-solid fa-file-excel"></i><strong>Importar Base</strong><span>Atualizar colaboradores</span></button>
+            <button id="supportNovaSolicitacao" class="quick-action"><i class="fa-solid fa-file-circle-plus"></i><strong>Nova Solicitação</strong><span>Pesquisar e abrir cards</span></button>
+            <button id="supportMinhasSolicitacoes" class="quick-action"><i class="fa-solid fa-clipboard-list"></i><strong>Minhas Solicitações</strong><span>Ver o que você gerou</span></button>
+          </div>
+        </section>
+
+        <section class="search-panel">
+          <label for="txtPesquisa"><i class="fa-solid fa-magnifying-glass"></i> Pesquisar colaborador</label>
+          <input id="txtPesquisa" type="text" placeholder="Digite matrícula, nome ou CPF" autocomplete="off" />
+          <div id="listaPesquisa" class="result-list"></div>
+        </section>
+
+        <section class="employee-panel" id="employeePanel">
+          <div class="employee-avatar"><i class="fa-solid fa-user"></i></div>
+          <div class="employee-body">
+            <div class="employee-title">
+              <div><h3 id="nomeColaborador">Nenhum colaborador selecionado</h3><span id="statusColaborador" class="pill danger">Base não carregada</span></div>
+              <button id="btnAbrirDossie" class="btn btn-primary btn-sm"><i class="fa-solid fa-folder-open"></i> Abrir Dossiê</button>
+            </div>
+            <div class="employee-grid">
+              <div><small>Matrícula</small><strong id="matriculaColaborador">---</strong></div>
+              <div><small>CPF</small><strong id="cpfColaborador">---</strong></div>
+              <div><small>Cargo</small><strong id="cargoColaborador">---</strong></div>
+              <div><small>Empresa</small><strong id="empresaColaborador">Empresa Tonhão Ltda</strong></div>
+              <div><small>Regional / Folha</small><strong id="folhaColaborador">---</strong></div>
+              <div><small>Admissão</small><strong id="admissaoColaborador">---</strong></div>
+              <div><small>Horário</small><strong id="horarioColaborador">---</strong></div>
+              <div><small>Situação</small><strong id="situacaoColaborador">---</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-title"><i class="fa-solid fa-star"></i><h3>Favoritos</h3></div>
+          <div id="favoritosGrid" class="module-grid compact"></div>
+        </section>
+
+
+        <section class="section-block collaborator-history-block">
+          <div class="section-title"><i class="fa-solid fa-user-clock"></i><h3>Histórico do Colaborador</h3></div>
+          <div id="historicoColaboradorGrid" class="history-grid"></div>
+        </section>
+
+
+        <section class="section-block">
+          <div class="section-title"><i class="fa-solid fa-layer-group"></i><h3>Solicitações</h3></div>
+          <div id="modulesGrid" class="modules-by-category"></div>
+        </section>
+      </section>
+
+
+      <section id="dossieView" class="view">
+        <section class="section-block dossie-screen">
+          <div class="section-title"><i class="fa-solid fa-address-card"></i><h3>Dossiê do Colaborador</h3></div>
+          <div id="dossieConteudo" class="dossie-content"></div>
+        </section>
+      </section>
+
+      <section id="historyView" class="view">
+        <section class="section-block history-screen">
+          <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i><h3>Últimas Solicitações</h3></div>
+          <div id="historicoGrid" class="history-grid"></div>
+        </section>
+      </section>
+
+
+      <section id="timelineView" class="view">
+        <section class="section-block history-screen">
+          <div class="section-title"><i class="fa-solid fa-timeline"></i><h3>Timeline do Colaborador</h3></div>
+          <div id="timelineColaborador" class="timeline-box"></div>
+        </section>
+      </section>
+
+      <section id="globalSearchView" class="view">
+        <section class="section-block history-screen">
+          <div class="section-title"><i class="fa-solid fa-magnifying-glass-chart"></i><h3>Pesquisa Global</h3></div>
+          <div class="global-search-box">
+            <input id="txtPesquisaGlobal" type="text" placeholder="Pesquise colaboradores, módulos, protocolos ou histórico..." autocomplete="off" />
+          </div>
+          <div id="resultadoPesquisaGlobal" class="global-results"></div>
+        </section>
+      </section>
+
+      <section id="processCenterView" class="view">
+        <section class="section-block process-center-screen">
+          <div class="section-title"><i class="fa-solid fa-diagram-project"></i><h3>Central de Processos</h3></div>
+          <p class="view-intro">Escolha uma rotina por categoria. Os formulários continuam estáveis e abrem no modelo clássico.</p>
+          <div class="process-metrics-block">
+            <div class="section-title compact-title"><i class="fa-solid fa-chart-simple"></i><h3>Indicadores por Processo</h3></div>
+            <div id="processMetricsGrid" class="live-grid"></div>
+          </div>
+          <div id="processCenterGrid" class="process-center-grid"></div>
+        </section>
+      </section>
+
+      <section id="activityView" class="view">
+        <section class="section-block activity-screen">
+          <div class="section-title"><i class="fa-solid fa-bolt"></i><h3>Centro de Atividades</h3></div>
+          <p class="view-intro">Feed das ações recentes realizadas no TONHO TECH People.</p>
+          <div id="atividadeGrid" class="activity-feed"></div>
+        </section>
+      </section>
+
+      <section id="libraryView" class="view">
+        <section class="section-block library-screen">
+          <div class="section-title"><i class="fa-solid fa-book-open"></i><h3>Biblioteca RH</h3></div>
+          <p class="view-intro">Procedimentos, políticas, modelos e orientações para consulta rápida.</p>
+          <div class="library-search"><input id="txtBiblioteca" type="text" placeholder="Pesquisar na biblioteca: vale transporte, crachá, convênio, reembolso..." autocomplete="off"></div>
+          <div id="bibliotecaGrid" class="library-grid"></div>
+        </section>
+      </section>
+
+      <section id="updatesView" class="view">
+        <section class="section-block updates-screen">
+          <div class="section-title"><i class="fa-solid fa-sparkles"></i><h3>Novidades da Versão</h3></div>
+          <div id="novidadesGrid" class="updates-grid"></div>
+        </section>
+      </section>
+
+      <section id="reportsView" class="view">
+        <section class="section-block history-screen">
+          <div class="section-title"><i class="fa-solid fa-chart-column"></i><h3>Relatórios</h3></div>
+
+          <div class="report-actions">
+            <div class="report-filter">
+              <label>Módulo</label>
+              <select id="filtroModuloRelatorio"><option value="">Todos os módulos</option></select>
+            </div>
+            <div class="report-filter">
+              <label>Usuário</label>
+              <select id="filtroUsuarioRelatorio"><option value="">Todos os usuários</option></select>
+            </div>
+            <button class="btn btn-outline-primary" id="btnAtualizarRelatorio"><i class="fa-solid fa-rotate"></i> Atualizar</button>
+            <button class="btn btn-primary" id="btnExportarCSV"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+          </div>
+
+          <div class="report-stats">
+            <article class="report-stat"><span>Hoje</span><strong id="relTotalHoje">0</strong></article>
+            <article class="report-stat"><span>Este mês</span><strong id="relTotalMes">0</strong></article>
+            <article class="report-stat"><span>Total geral</span><strong id="relTotalGeral">0</strong></article>
+            <article class="report-stat"><span>Colaboradores</span><strong id="relColaboradores">0</strong></article>
+          </div>
+
+          <div class="report-grid">
+            <article class="report-card">
+              <h4>Ranking por módulo</h4>
+              <div id="rankingModulo" class="rank-list"></div>
+            </article>
+            <article class="report-card">
+              <h4>Ranking por usuário</h4>
+              <div id="rankingUsuario" class="rank-list"></div>
+            </article>
+          </div>
+
+          <div class="report-table-wrap">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Protocolo</th>
+                  <th>Data/Hora</th>
+                  <th>Módulo</th>
+                  <th>Colaborador</th>
+                  <th>Matrícula</th>
+                  <th>Usuário</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaRelatorio"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+
+      <section id="auditView" class="view">
+        <section class="section-block history-screen">
+          <div class="section-title"><i class="fa-solid fa-shield-halved"></i><h3>Auditoria do Sistema</h3></div>
+
+          <div class="report-actions">
+            <div class="report-filter">
+              <label>Usuário</label>
+              <select id="filtroUsuarioAuditoria"><option value="">Todos os usuários</option></select>
+            </div>
+            <div class="report-filter">
+              <label>Ação</label>
+              <select id="filtroAcaoAuditoria"><option value="">Todas as ações</option></select>
+            </div>
+            <button class="btn btn-outline-primary" id="btnAtualizarAuditoria"><i class="fa-solid fa-rotate"></i> Atualizar</button>
+            <button class="btn btn-primary" id="btnExportarAuditoria"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+            <button class="btn btn-outline-danger" id="btnLimparAuditoria"><i class="fa-solid fa-trash"></i> Limpar auditoria</button>
+          </div>
+
+          <div class="report-stats audit-stats">
+            <article class="report-stat"><span>Registros filtrados</span><strong id="totalAuditoria">0</strong></article>
+            <article class="report-stat"><span>Retenção local</span><strong>1000</strong></article>
+          </div>
+
+          <div class="report-table-wrap">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Data/Hora</th>
+                  <th>Usuário</th>
+                  <th>Perfil</th>
+                  <th>Ação</th>
+                  <th>Detalhes</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaAuditoria"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section id="configView" class="view">
+        <section class="section-block history-screen">
+          <div class="section-title"><i class="fa-solid fa-gear"></i><h3>Configurações</h3></div>
+          <div class="settings-grid">
+            <article class="settings-card">
+              <h4>Base de colaboradores</h4>
+              <p id="infoBaseLocal">Nenhuma base local carregada.</p>
+              <button class="btn btn-outline-danger" id="btnLimparBase"><i class="fa-solid fa-trash"></i> Limpar base local</button>
+            </article>
+            <article class="settings-card">
+              <h4>Histórico</h4>
+              <p>Gerencie os registros salvos neste navegador.</p>
+              <button class="btn btn-outline-danger" id="btnLimparHistorico"><i class="fa-solid fa-clock-rotate-left"></i> Limpar histórico</button>
+            </article>
+            <article class="settings-card">
+              <h4>Usuário atual</h4>
+              <p id="infoUsuarioAtual">Nenhum usuário carregado.</p>
+              <button class="btn btn-primary" id="btnTrocarUsuario"><i class="fa-solid fa-user-gear"></i> Trocar usuário</button>
+            </article>
+            <article class="settings-card admin-only">
+              <h4>Usuários e permissões</h4>
+              <p>Gerencie os usuários locais, perfis de acesso e PINs.</p>
+              <button class="btn btn-primary" id="btnGerenciarUsuarios"><i class="fa-solid fa-users-gear"></i> Gerenciar usuários</button>
+            </article>
+            <article class="settings-card">
+              <h4>Segurança</h4>
+              <p>Altere o PIN do usuário atualmente logado.</p>
+              <button class="btn btn-outline-primary" id="btnAlterarPin"><i class="fa-solid fa-key"></i> Alterar meu PIN</button>
+            </article>
+            <article class="settings-card admin-only">
+              <h4>Backup e restauração</h4>
+              <p>Exporte ou restaure usuários, histórico e base local deste navegador.</p>
+              <div class="backup-actions">
+                <button class="btn btn-outline-primary" id="btnExportarBackup"><i class="fa-solid fa-download"></i> Exportar backup</button>
+                <button class="btn btn-primary" id="btnImportarBackup"><i class="fa-solid fa-upload"></i> Restaurar backup</button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section id="moduleView" class="view">
+        <div id="workspace"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <img class="login-logo" src="assets/img/tonho-tech-logo-vertical.svg" alt="TONHO TECH People">
+      <p class="login-license">Licenciado para<br><strong>Empresa Tonhão Ltda.</strong></p>
+      <label>Usuário</label>
+      <select id="loginUsuario"></select>
+      <label>PIN de acesso</label>
+      <input id="loginPin" type="password" placeholder="Digite seu PIN">
+      <button id="btnEntrar" class="btn btn-primary w-100 mt-3"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
+      <small>Controle local para uso interno. Não substitui autenticação corporativa.</small>
+    </div>
+  </div>
+
+
+
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h3 id="modalTitulo">TONHO TECH People</h3>
+          <p id="modalSubtitulo">Configuração local</p>
+        </div>
+        <button id="btnFecharModal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalConteudo" class="modal-content-area"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast-box"><i class="fa-solid fa-circle-check"></i><div><strong id="toastTitulo">Sucesso</strong><span id="toastMensagem">Operação realizada.</span></div></div>
+
+
+  <div id="commandPalette" class="command-palette" aria-hidden="true">
+    <div class="command-box">
+      <div class="command-head">
+        <div>
+          <strong>TONHO TECH Command Center</strong>
+          <span>Digite para navegar ou executar uma ação rápida</span>
+        </div>
+        <kbd>Esc</kbd>
+      </div>
+      <div class="command-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="commandInput" type="text" placeholder="Ex.: importar base, processos, relatório, dossiê...">
+      </div>
+      <div id="commandResults" class="command-results"></div>
+      <div class="command-footer">
+        <span><kbd>Ctrl</kbd> + <kbd>K</kbd> abrir</span>
+        <span><kbd>Enter</kbd> executar</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/libs/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="core/app.js"></script>
+</body>
+</html>
