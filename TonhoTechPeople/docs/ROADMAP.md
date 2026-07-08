@@ -1,27 +1,16 @@
-# Roadmap — TONHO TECH People
+# Roadmap - TONHO TECH People Web
 
-## v1.1 — Fundação
-- Estrutura modular
-- Identidade visual inicial
-- Base multiunidades preservada
+## 0.2.x
+- Consolidar Home Web, Central de Processos e Dossiê 360°.
+- Melhorar importação Excel com resumo de novos/atualizados.
 
-## v1.1 — Dossiê 360°
-- Dados gerais
-- Solicitações
-- Timeline
-- Benefícios
-- Anexos preparados
+## 0.3.x
+- Login e usuários 100% administráveis pelo Supabase.
+- Perfil Suporte Regional com experiência própria.
 
-## v1.1 — Processos configuráveis
-- Processos baseados em configuração
-- Formulários gerados automaticamente
+## 0.4.x
+- Documentos corporativos e impressão padronizada.
+- Histórico e auditoria online.
 
-## v6.3 — Documentos corporativos
-- Logo no documento
-- Cabeçalho e rodapé padronizados
-- Protocolo e emissão por regional
-
-## v7.0 — Plataforma em rede
-- Banco de dados
-- Multiusuário real
-- Implantação corporativa
+## 1.0
+- Primeira versão operacional para uso pelas regionais.

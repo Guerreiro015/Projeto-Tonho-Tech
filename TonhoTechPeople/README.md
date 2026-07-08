@@ -1,18 +1,51 @@
-# TONHO TECH People v3.1
+# TONHO TECH People Web
 
-Primeira evolução da fase cloud.
+Aplicação Web do TONHO TECH People usando React + Vite + Supabase.
 
-## O que testar
-1. Execute `database/migrations/001_cloud_users.sql` no Supabase.
-2. Abra o sistema pelo Live Server.
-3. Faça login com `Administrador • Admin` e PIN `1234`.
-4. Verifique no Supabase se a tabela `usuarios` recebeu os usuários padrão.
-5. Importe a base Excel e confira `colaboradores` e `regionais`.
+## Versão atual
 
-## Perfis
-- Admin
-- RH/DP
-- Suporte Regional
+**0.2.0 - Workspace Web e Design System Inicial**
 
-## Segurança
-A anon public key é usada no frontend. Não use a service_role key no navegador.
+## Como rodar localmente
+
+1. Instale o Node.js.
+2. Abra a pasta no VS Code.
+3. Execute:
+
+```bash
+npm install
+npm run dev
+```
+
+4. Abra o endereço exibido no terminal, normalmente:
+
+```text
+http://localhost:5173
+```
+
+## Login padrão
+
+- admin / 1234
+- rhdp / 1234
+- suporte / 1234
+
+## Supabase
+
+O arquivo `.env` já está configurado com a URL e anon key informadas para desenvolvimento.
+
+Execute o script em `database/migrations/002_people_web_foundation.sql` no SQL Editor do Supabase caso ainda não tenha executado.
+
+## Novidades da versão 0.2.0
+
+- Home executiva conectada aos dados online.
+- Central de Processos.
+- Solicitações por processo configurável.
+- Dossiê 360° inicial.
+- Componentes reutilizáveis do Design System TONHO TECH.
+
+## Deploy futuro
+
+Preparado para GitHub + Cloudflare Pages.
+
+- Comando de build: `npm run build`
+- Pasta de saída: `dist`
