@@ -1,56 +1,23 @@
-# TONHO TECH People Web
+# TONHO TECH People Web 0.4.2
 
-Gestão Inteligente de Pessoas — versão Web com React, Vite e Supabase.
+Versão com ajuste de permissões para o perfil **Suporte Regional**.
 
-## Versão
-
-0.4.0 — Administração Online
-
-## Rodar localmente
+## Como rodar
 
 ```bash
 npm install
 npm run dev
 ```
 
-Acesse:
+Acesse o endereço exibido pelo Vite, normalmente `http://localhost:5173`.
 
-```text
-http://localhost:5173
-```
+## Regras aplicadas
 
-## Supabase
+- **ADMIN** e **RH/DP** podem importar/carregar a base de colaboradores.
+- **SUPORTE** não pode importar a base.
+- **SUPORTE** pesquisa e visualiza apenas colaboradores da sua própria regional (`regional_nome`).
+- **SUPORTE** vê somente suas solicitações na Home e em Minhas Solicitações.
 
-Configure o `.env`:
+## Próxima etapa recomendada
 
-```env
-VITE_SUPABASE_URL=https://avuuryawpgvunwxjfypo.supabase.co
-VITE_SUPABASE_ANON_KEY=SUA_ANON_PUBLIC_KEY
-```
-
-## Migration desta versão
-
-Execute no SQL Editor do Supabase:
-
-```text
-database/migrations/004_admin_users.sql
-```
-
-## Usuários padrão
-
-- admin / 1234 — ADMIN
-- rhdp / 1234 — RH/DP
-- suporte / 1234 — SUPORTE
-
-## Novidades 0.4.0
-
-- Administração Online de usuários.
-- Criação de usuários por perfil.
-- Vínculo de Suporte Regional com Regional.
-- Ativar/Inativar usuários.
-- Base preparada para gestão multiunidades.
-
-
-## v0.4.1
-
-Após criar uma solicitação, use o botão **Imprimir / Salvar PDF**. O navegador abrirá a janela de impressão; para salvar em PDF, escolha o destino **Salvar como PDF**.
+Criar políticas RLS no Supabase para garantir essas regras também no banco de dados.

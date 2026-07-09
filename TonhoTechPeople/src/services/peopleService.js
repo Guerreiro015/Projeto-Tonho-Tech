@@ -84,28 +84,47 @@ export const PeopleService = {
     return { colaboradores, regionais };
   },
 
-  async pesquisar(texto) {
+  async pesquisar(texto, usuario) {
     const q = normalize(texto);
     if (!q) return [];
 
     if (isCloudConfigured) {
-      const { data, error } = await supabase
+      let query = supabase
         .from('colaboradores')
         .select('*')
-        .or(`matricula.ilike.%${q}%,nome.ilike.%${q}%,cpf.ilike.%${q}%`)
-        .limit(20);
+        .or(`matricula.ilike.%${q}%,nome.ilike.%${q}%,cpf.ilike.%${q}%`);
+
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) {
+        query = query.eq('regional', usuario.regional_nome);
+      }
+
+      const { data, error } = await query.limit(20);
       if (!error) return data || [];
     }
 
     const cache = JSON.parse(localStorage.getItem('tt_people_colaboradores_cache') || '[]');
-    return cache.filter(c => normalize(c.matricula).includes(q) || normalize(c.nome).includes(q) || normalize(c.cpf).includes(q)).slice(0, 20);
+    return cache.filter(c => {
+      const matchText = normalize(c.matricula).includes(q) || normalize(c.nome).includes(q) || normalize(c.cpf).includes(q);
+      const matchRegional = usuario?.perfil === 'SUPORTE' && usuario?.regional_nome
+        ? normalize(c.regional || c.folha) === normalize(usuario.regional_nome)
+        : true;
+      return matchText && matchRegional;
+    }).slice(0, 20);
   },
 
-  async contar() {
+  async contar(usuario) {
     if (isCloudConfigured) {
-      const { count } = await supabase.from('colaboradores').select('*', { count: 'exact', head: true });
+      let query = supabase.from('colaboradores').select('*', { count: 'exact', head: true });
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) {
+        query = query.eq('regional', usuario.regional_nome);
+      }
+      const { count } = await query;
       return count || 0;
     }
-    return JSON.parse(localStorage.getItem('tt_people_colaboradores_cache') || '[]').length;
+    const cache = JSON.parse(localStorage.getItem('tt_people_colaboradores_cache') || '[]');
+    if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) {
+      return cache.filter(c => normalize(c.regional || c.folha) === normalize(usuario.regional_nome)).length;
+    }
+    return cache.length;
   }
 };

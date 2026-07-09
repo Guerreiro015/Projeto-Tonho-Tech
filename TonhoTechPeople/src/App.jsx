@@ -41,8 +41,8 @@ export default function App() {
 
   function renderPage() {
     if (currentPage === 'Home') return <Home user={user} navigate={navigate} />;
-    if (currentPage === 'Importar Base') return <ImportBase />;
-    if (currentPage === 'Colaboradores') return <People onSelect={(p) => { setSelectedPerson(p); setCurrentPage('Dossiê'); }} />;
+    if (currentPage === 'Importar Base') return user.perfil === 'SUPORTE' ? <Placeholder title="Acesso restrito" message="O perfil Suporte Regional não possui permissão para carregar a base. Solicite a atualização ao RH/DP ou Administrador." /> : <ImportBase user={user} />;
+    if (currentPage === 'Colaboradores') return <People user={user} onSelect={(p) => { setSelectedPerson(p); setCurrentPage('Dossiê'); }} />;
     if (currentPage === 'Processos') return <Processes onStart={startProcess} />;
     if (currentPage === 'Nova Solicitação') return <NewRequest user={user} initialProcessId={initialProcessId} />;
     if (currentPage === 'Minhas Solicitações' || currentPage === 'Solicitações') return <Requests user={user} />;

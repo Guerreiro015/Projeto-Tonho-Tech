@@ -131,7 +131,7 @@ export function NewRequest({ user, initialProcessId }) {
 
   return (
     <div className="grid two">
-      <People onSelect={setColaborador} />
+      <People user={user} onSelect={setColaborador} />
       <Card title="Nova Solicitação Online">
         {colaborador ? (
           <div className="selected-person"><strong>{colaborador.nome}</strong><span>{colaborador.matricula} • {colaborador.cargo} • {colaborador.regional}</span></div>

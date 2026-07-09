@@ -1,7 +1,16 @@
-# TONHO TECH People Web 0.4.1
+# Changelog
 
-## Correção
-- Após gerar uma solicitação, agora o sistema exibe a pré-visualização do documento.
-- Adicionada opção **Imprimir / Salvar PDF**.
-- Documento gerado em nova janela com layout institucional TONHO TECH.
-- Mantida gravação online da solicitação no Supabase.
+## 0.4.2 - Permissões do Suporte Regional
+
+### Alterado
+- Perfil SUPORTE não vê mais a opção Importar Base no menu lateral.
+- Perfil SUPORTE não vê mais a ação rápida Importar Base na Home.
+- Rota Importar Base agora bloqueia acesso quando o perfil for SUPORTE.
+
+### Segurança operacional
+- Pesquisa de colaboradores filtra pela regional do usuário SUPORTE.
+- Indicadores da Home do SUPORTE passam a considerar apenas sua regional e suas solicitações.
+- Últimas solicitações da Home do SUPORTE mostram apenas solicitações geradas por ele.
+
+### Observação
+- Nesta fase o filtro é aplicado no frontend/serviços. Na etapa de segurança final, criaremos políticas RLS no Supabase para reforçar a regra também no banco.

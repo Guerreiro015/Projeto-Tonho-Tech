@@ -12,11 +12,11 @@ export function Home({ user, navigate }) {
 
   useEffect(() => {
     Promise.all([
-      PeopleService.contar(),
-      RequestService.contar(),
-      RequestService.hoje(),
-      RegionalService.contar(),
-      RequestService.ultimas(5)
+      PeopleService.contar(user),
+      RequestService.contar(user),
+      RequestService.hoje(user),
+      user.perfil === 'SUPORTE' ? Promise.resolve(user.regional_nome ? 1 : 0) : RegionalService.contar(),
+      RequestService.ultimas(5, user)
     ]).then(([colaboradores, solicitacoes, hoje, regionais, ultimas]) => {
       setMetrics({ colaboradores, solicitacoes, hoje, regionais, ultimas });
     });
@@ -56,7 +56,7 @@ export function Home({ user, navigate }) {
         <Card title="Ações Rápidas">
           <div className="quick-grid">
             <button onClick={() => navigate('Nova Solicitação')}>📝 Nova Solicitação</button>
-            <button onClick={() => navigate('Importar Base')}>📥 Importar Base</button>
+            {user.perfil !== 'SUPORTE' && <button onClick={() => navigate('Importar Base')}>📥 Importar Base</button>}
             <button onClick={() => navigate('Minhas Solicitações')}>📋 Solicitações</button>
             {user.perfil !== 'SUPORTE' && <button onClick={() => navigate('Relatórios')}>📊 Relatórios</button>}
           </div>

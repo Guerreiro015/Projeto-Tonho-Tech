@@ -35,14 +35,16 @@ export const RequestService = {
 
   async listarTodas(limite = 500) {
     if (isCloudConfigured) {
-      const { data, error } = await supabase
+      let query = supabase
         .from('solicitacoes')
         .select('*')
-        .order('criado_em', { ascending: false })
-        .limit(limite);
+        .order('criado_em', { ascending: false });
+      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      const { data, error } = await query.limit(limite);
       if (!error) return data || [];
     }
-    return JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]').slice(0, limite);
+    const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
+    return (usuario?.perfil === 'SUPORTE' ? local.filter(item => item.usuario === usuario.usuario) : local).slice(0, limite);
   },
 
   async minhas(usuario) {
@@ -55,37 +57,44 @@ export const RequestService = {
     return JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
   },
 
-  async contar() {
+  async contar(usuario) {
     if (isCloudConfigured) {
-      const { count, error } = await supabase.from('solicitacoes').select('*', { count: 'exact', head: true });
-      if (!error) return count || 0;
-    }
-    return JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]').length;
-  },
-
-  async hoje() {
-    const inicio = new Date();
-    inicio.setHours(0, 0, 0, 0);
-    if (isCloudConfigured) {
-      const { count, error } = await supabase
-        .from('solicitacoes')
-        .select('*', { count: 'exact', head: true })
-        .gte('criado_em', inicio.toISOString());
+      let query = supabase.from('solicitacoes').select('*', { count: 'exact', head: true });
+      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      const { count, error } = await query;
       if (!error) return count || 0;
     }
     const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
-    return local.filter(item => new Date(item.criado_em || Date.now()) >= inicio).length;
+    return usuario?.perfil === 'SUPORTE' ? local.filter(item => item.usuario === usuario.usuario).length : local.length;
   },
 
-  async ultimas(limite = 6) {
+  async hoje(usuario) {
+    const inicio = new Date();
+    inicio.setHours(0, 0, 0, 0);
     if (isCloudConfigured) {
-      const { data, error } = await supabase
+      let query = supabase
+        .from('solicitacoes')
+        .select('*', { count: 'exact', head: true })
+        .gte('criado_em', inicio.toISOString());
+      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      const { count, error } = await query;
+      if (!error) return count || 0;
+    }
+    const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
+    return local.filter(item => new Date(item.criado_em || Date.now()) >= inicio && (usuario?.perfil === 'SUPORTE' ? item.usuario === usuario.usuario : true)).length;
+  },
+
+  async ultimas(limite = 6, usuario) {
+    if (isCloudConfigured) {
+      let query = supabase
         .from('solicitacoes')
         .select('*')
-        .order('criado_em', { ascending: false })
-        .limit(limite);
+        .order('criado_em', { ascending: false });
+      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      const { data, error } = await query.limit(limite);
       if (!error) return data || [];
     }
-    return JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]').slice(0, limite);
+    const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
+    return (usuario?.perfil === 'SUPORTE' ? local.filter(item => item.usuario === usuario.usuario) : local).slice(0, limite);
   }
 };

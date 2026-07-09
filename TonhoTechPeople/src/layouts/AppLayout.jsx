@@ -4,7 +4,7 @@ import { Button } from '../components/Button';
 export function AppLayout({ user, currentPage, setCurrentPage, logout, children }) {
   const adminItems = ['Home', 'Colaboradores', 'Processos', 'Solicitações', 'Relatórios', 'Administração'];
   const rhItems = ['Home', 'Colaboradores', 'Processos', 'Solicitações', 'Relatórios'];
-  const suporteItems = ['Home', 'Importar Base', 'Nova Solicitação', 'Minhas Solicitações'];
+  const suporteItems = ['Home', 'Nova Solicitação', 'Minhas Solicitações'];
   const items = user.perfil === 'ADMIN' ? adminItems : user.perfil === 'RHDP' ? rhItems : suporteItems;
 
   const labels = {
