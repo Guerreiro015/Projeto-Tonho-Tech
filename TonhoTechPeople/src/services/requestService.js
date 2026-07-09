@@ -33,6 +33,18 @@ export const RequestService = {
     return local[0];
   },
 
+  async listarTodas(limite = 500) {
+    if (isCloudConfigured) {
+      const { data, error } = await supabase
+        .from('solicitacoes')
+        .select('*')
+        .order('criado_em', { ascending: false })
+        .limit(limite);
+      if (!error) return data || [];
+    }
+    return JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]').slice(0, limite);
+  },
+
   async minhas(usuario) {
     if (isCloudConfigured) {
       let query = supabase.from('solicitacoes').select('*').order('criado_em', { ascending: false }).limit(50);

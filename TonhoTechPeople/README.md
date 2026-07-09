@@ -1,51 +1,56 @@
 # TONHO TECH People Web
 
-Aplicação Web do TONHO TECH People usando React + Vite + Supabase.
+Gestão Inteligente de Pessoas — versão Web com React, Vite e Supabase.
 
-## Versão atual
+## Versão
 
-**0.2.0 - Workspace Web e Design System Inicial**
+0.4.0 — Administração Online
 
-## Como rodar localmente
-
-1. Instale o Node.js.
-2. Abra a pasta no VS Code.
-3. Execute:
+## Rodar localmente
 
 ```bash
 npm install
 npm run dev
 ```
 
-4. Abra o endereço exibido no terminal, normalmente:
+Acesse:
 
 ```text
 http://localhost:5173
 ```
 
-## Login padrão
-
-- admin / 1234
-- rhdp / 1234
-- suporte / 1234
-
 ## Supabase
 
-O arquivo `.env` já está configurado com a URL e anon key informadas para desenvolvimento.
+Configure o `.env`:
 
-Execute o script em `database/migrations/002_people_web_foundation.sql` no SQL Editor do Supabase caso ainda não tenha executado.
+```env
+VITE_SUPABASE_URL=https://avuuryawpgvunwxjfypo.supabase.co
+VITE_SUPABASE_ANON_KEY=SUA_ANON_PUBLIC_KEY
+```
 
-## Novidades da versão 0.2.0
+## Migration desta versão
 
-- Home executiva conectada aos dados online.
-- Central de Processos.
-- Solicitações por processo configurável.
-- Dossiê 360° inicial.
-- Componentes reutilizáveis do Design System TONHO TECH.
+Execute no SQL Editor do Supabase:
 
-## Deploy futuro
+```text
+database/migrations/004_admin_users.sql
+```
 
-Preparado para GitHub + Cloudflare Pages.
+## Usuários padrão
 
-- Comando de build: `npm run build`
-- Pasta de saída: `dist`
+- admin / 1234 — ADMIN
+- rhdp / 1234 — RH/DP
+- suporte / 1234 — SUPORTE
+
+## Novidades 0.4.0
+
+- Administração Online de usuários.
+- Criação de usuários por perfil.
+- Vínculo de Suporte Regional com Regional.
+- Ativar/Inativar usuários.
+- Base preparada para gestão multiunidades.
+
+
+## v0.4.1
+
+Após criar uma solicitação, use o botão **Imprimir / Salvar PDF**. O navegador abrirá a janela de impressão; para salvar em PDF, escolha o destino **Salvar como PDF**.

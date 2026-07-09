@@ -7,6 +7,8 @@ import { NewRequest } from './pages/NewRequest';
 import { Requests } from './pages/Requests';
 import { Processes } from './pages/Processes';
 import { Dossie } from './pages/Dossie';
+import { Reports } from './pages/Reports';
+import { Admin } from './pages/Admin';
 import { AppLayout } from './layouts/AppLayout';
 import './styles.css';
 
@@ -45,6 +47,8 @@ export default function App() {
     if (currentPage === 'Nova Solicitação') return <NewRequest user={user} initialProcessId={initialProcessId} />;
     if (currentPage === 'Minhas Solicitações' || currentPage === 'Solicitações') return <Requests user={user} />;
     if (currentPage === 'Dossiê') return <Dossie person={selectedPerson} onNewRequest={() => setCurrentPage('Nova Solicitação')} />;
+    if (currentPage === 'Relatórios') return <Reports user={user} />;
+    if (currentPage === 'Administração') return <Admin user={user} />;
     return <Placeholder title={currentPage} />;
   }
 

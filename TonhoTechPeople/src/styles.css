@@ -3,3 +3,44 @@
 
 /* TONHO TECH People Web 0.2.0 */
 .home-stack{display:grid;gap:24px}.welcome-panel{background:linear-gradient(135deg,#0F3D75,#2D7FF9);color:#fff;border-radius:30px;padding:32px;box-shadow:var(--shadow);display:flex;justify-content:space-between;gap:24px;align-items:center}.welcome-panel.compact{margin-bottom:24px}.welcome-panel h2{font-size:38px;margin:6px 0 8px;letter-spacing:-1px}.welcome-panel p{margin:0;color:#d8e8ff}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:900;color:#7cc7ff}.welcome-actions{display:flex;gap:12px;flex-wrap:wrap}.welcome-actions button,.quick-grid button{border:0;border-radius:16px;background:#fff;color:var(--blue);font-weight:900;padding:14px 18px;cursor:pointer}.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.tt-stat{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;gap:16px;align-items:center;box-shadow:var(--shadow)}.tt-stat-icon{width:58px;height:58px;border-radius:18px;background:#eaf3ff;display:grid;place-items:center;font-size:26px}.tt-stat span{display:block;color:var(--muted);font-size:13px;font-weight:700}.tt-stat strong{display:block;color:var(--blue);font-size:30px;line-height:1;font-weight:900;margin:6px 0}.tt-stat small{color:var(--muted)}.tt-stat-green .tt-stat-icon{background:#e9fbee}.tt-stat-orange .tt-stat-icon{background:#fff5df}.tt-stat-purple .tt-stat-icon{background:#f1ebff}.tt-badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;margin-right:8px}.tt-badge-blue{background:#eaf3ff;color:#0F3D75}.tt-badge-green{background:#e9fbee;color:#0f7a35}.tt-badge-orange{background:#fff5df;color:#9a6200}.tt-badge-purple{background:#f1ebff;color:#572cb8}.status-grid{display:grid;gap:12px}.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.quick-grid button{background:#eef5ff;text-align:left}.activity-list{display:grid;gap:12px}.activity-item{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:14px}.activity-item span{display:block;color:var(--muted);font-size:13px;margin-top:4px}.tt-empty{text-align:center;padding:28px;color:var(--muted)}.tt-empty div{font-size:42px}.tt-empty strong{display:block;color:var(--blue);font-size:18px;margin:10px 0 4px}.process-page{display:grid;gap:22px}.process-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}.process-card{border:1px solid var(--line);background:#fff;border-radius:22px;padding:18px;display:flex;gap:14px;text-align:left;cursor:pointer;transition:.2s}.process-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#bcd7ff}.process-icon{width:52px;height:52px;border-radius:16px;background:#eef5ff;display:grid;place-items:center;font-size:26px;flex:none}.process-card strong{display:block;color:var(--blue);font-size:17px}.process-card p{color:var(--muted);font-size:13px;line-height:1.45}.process-summary{display:flex;gap:14px;background:#eef5ff;border-radius:18px;padding:16px;margin:16px 0}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}.form-grid .full{grid-column:1/-1}.dossie-page{display:grid;gap:22px}.dossie-hero{background:#fff;border:1px solid var(--line);border-radius:30px;padding:26px;display:flex;align-items:center;gap:18px;box-shadow:var(--shadow)}.dossie-hero h2{margin:0;color:var(--blue);font-size:34px}.dossie-hero p{margin:6px 0;color:var(--muted)}.dossie-hero button{margin-left:auto;border:0;background:var(--blue2);color:#fff;border-radius:16px;padding:13px 18px;font-weight:900;cursor:pointer}.avatar-xl{width:84px;height:84px;border-radius:24px;background:linear-gradient(135deg,#0F3D75,#2D7FF9);color:#fff;font-size:38px;font-weight:900;display:grid;place-items:center}.tabs{display:flex;gap:10px;flex-wrap:wrap}.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 16px;color:var(--blue);font-weight:800;cursor:pointer}.tabs button.active{background:var(--blue);color:#fff}.data-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.info-box{background:#f8fbff;border:1px solid var(--line);border-radius:18px;padding:16px}.info-box span{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:6px}.info-box strong{color:var(--blue)}.tt-table-wrap{overflow:auto}@media(max-width:1000px){.stats-grid,.data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome-panel,.dossie-hero{align-items:flex-start;flex-direction:column}.dossie-hero button{margin-left:0}.quick-grid{grid-template-columns:1fr}}@media(max-width:640px){.stats-grid,.data-grid,.form-grid{grid-template-columns:1fr}.welcome-panel h2{font-size:30px}}
+
+/* Reports / Analytics */
+.reports-hero button,
+.welcome-panel button:disabled {
+  border: 0;
+  border-radius: 16px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+.welcome-panel button:disabled { opacity: .45; cursor: not-allowed; }
+.filter-row { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 18px; }
+.filter-row label { display: grid; gap: 8px; font-weight: 800; color: #0f274a; }
+.filter-row select { border: 1px solid #d8e2f2; border-radius: 14px; padding: 14px 16px; font-size: 15px; background: #fff; }
+.grid.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.ranking-list { display: grid; gap: 14px; }
+.ranking-item { display: grid; gap: 8px; }
+.ranking-item div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ranking-item span { color: #64748b; font-size: 12px; font-weight: 700; }
+.ranking-bar { height: 10px; border-radius: 999px; background: #e8eef8; overflow: hidden; }
+.ranking-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #2563eb, #22c55e); }
+@media (max-width: 1100px) { .grid.three { grid-template-columns: 1fr; } .filter-row { grid-template-columns: 1fr; } }
+
+/* Admin / Control Center 0.4.0 */
+.admin-grid { align-items: start; }
+.admin-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.admin-form .full { grid-column: 1 / -1; }
+.form-actions { display: flex; justify-content: flex-end; }
+.permission-list { display: grid; gap: 16px; }
+.permission-list > div { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #f8fbff; }
+.permission-list strong { display: block; color: var(--blue); margin: 8px 0 4px; }
+.permission-list p { margin: 0; color: var(--muted); line-height: 1.5; }
+.table-action { border: 0; background: #eef5ff; color: var(--blue); border-radius: 999px; padding: 8px 12px; font-weight: 800; cursor: pointer; }
+.table-action:hover { background: var(--blue); color: #fff; }
+@media (max-width: 760px) { .admin-form { grid-template-columns: 1fr; } }
+
+
+/* TONHO TECH People Web 0.4.1 - Documento de Solicitação */
+.request-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}.request-actions .tt-btn-ghost{width:auto;margin-top:0}.document-preview{margin-top:18px;border:1px solid #cfe2ff;background:linear-gradient(135deg,#fff,#f3f8ff);border-radius:22px;padding:22px}.document-preview-header{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px}.document-preview-header strong{display:block;color:var(--blue);font-size:18px}.document-preview-header span{display:block;color:var(--muted);font-size:12px}.tt-logo-mini{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#0F3D75,#2D7FF9);color:#fff;display:grid;place-items:center;font-weight:900;letter-spacing:-1px}.document-preview h3{color:var(--blue);margin:0 0 14px}.preview-grid{display:grid;grid-template-columns:180px 1fr;border:1px solid var(--line);border-radius:16px;overflow:hidden}.preview-grid span,.preview-grid strong{padding:12px;border-bottom:1px solid var(--line)}.preview-grid span{background:#eef5ff;color:var(--blue);font-size:12px;text-transform:uppercase;font-weight:900}.preview-grid strong{background:#fff;color:var(--text);font-weight:700}.preview-grid span:nth-last-child(2),.preview-grid strong:last-child{border-bottom:0}@media(max-width:640px){.preview-grid{grid-template-columns:1fr}.preview-grid span{border-bottom:0}.preview-grid strong{border-bottom:1px solid var(--line)}}
