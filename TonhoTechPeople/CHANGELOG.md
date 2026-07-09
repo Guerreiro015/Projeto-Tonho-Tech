@@ -1,16 +1,12 @@
-# Changelog
+# CHANGELOG
 
-## 0.4.2 - Permissões do Suporte Regional
+## 0.4.3
 
-### Alterado
-- Perfil SUPORTE não vê mais a opção Importar Base no menu lateral.
-- Perfil SUPORTE não vê mais a ação rápida Importar Base na Home.
-- Rota Importar Base agora bloqueia acesso quando o perfil for SUPORTE.
+### Adicionado
+- Administração agora permite editar credenciais dos usuários existentes.
+- Admin pode alterar nome, usuário/login, PIN, perfil, regional e status.
+- Botão **Editar** na listagem de usuários.
 
-### Segurança operacional
-- Pesquisa de colaboradores filtra pela regional do usuário SUPORTE.
-- Indicadores da Home do SUPORTE passam a considerar apenas sua regional e suas solicitações.
-- Últimas solicitações da Home do SUPORTE mostram apenas solicitações geradas por ele.
-
-### Observação
-- Nesta fase o filtro é aplicado no frontend/serviços. Na etapa de segurança final, criaremos políticas RLS no Supabase para reforçar a regra também no banco.
+### Melhorado
+- Permissões do perfil Suporte Regional documentadas na tela de administração.
+- Fluxo de edição com mensagem visual e botão cancelar edição.

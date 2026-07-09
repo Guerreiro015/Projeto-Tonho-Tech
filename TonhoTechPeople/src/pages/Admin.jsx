@@ -7,6 +7,7 @@ import { UserService } from '../services/userService';
 import { RegionalService } from '../services/regionalService';
 
 const emptyForm = {
+  id: '',
   nome: '',
   usuario: '',
   perfil: 'SUPORTE',
@@ -19,6 +20,7 @@ export function Admin({ user }) {
   const [usuarios, setUsuarios] = useState([]);
   const [regionais, setRegionais] = useState([]);
   const [form, setForm] = useState(emptyForm);
+  const [editing, setEditing] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -35,13 +37,35 @@ export function Admin({ user }) {
   const ativos = useMemo(() => usuarios.filter(u => u.ativo !== false).length, [usuarios]);
   const suporte = useMemo(() => usuarios.filter(u => u.perfil === 'SUPORTE').length, [usuarios]);
 
+  function resetForm() {
+    setForm(emptyForm);
+    setEditing(false);
+    setMessage('');
+  }
+
+  function editUser(usuario) {
+    setForm({
+      id: usuario.id || '',
+      nome: usuario.nome || '',
+      usuario: usuario.usuario || '',
+      perfil: usuario.perfil || 'SUPORTE',
+      pin: usuario.pin || '1234',
+      regional_nome: usuario.regional_nome || 'MATRIZ',
+      ativo: usuario.ativo !== false
+    });
+    setEditing(true);
+    setMessage('Editando usuário. Altere nome, login, PIN, perfil ou regional e clique em salvar.');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   async function submit(e) {
     e.preventDefault();
     setMessage('');
     try {
       await UserService.salvar(form);
       setForm(emptyForm);
-      setMessage('Usuário salvo com sucesso.');
+      setEditing(false);
+      setMessage(editing ? 'Credenciais atualizadas com sucesso.' : 'Usuário salvo com sucesso.');
       await load();
     } catch (err) {
       setMessage(err.message || 'Erro ao salvar usuário.');
@@ -63,7 +87,7 @@ export function Admin({ user }) {
         <div>
           <span className="eyebrow">TONHO TECH Control Center</span>
           <h2>Administração Online</h2>
-          <p>Gerencie usuários, perfis e vínculos regionais diretamente no Supabase.</p>
+          <p>Gerencie usuários, credenciais, perfis e vínculos regionais diretamente no Supabase.</p>
         </div>
       </section>
 
@@ -75,23 +99,27 @@ export function Admin({ user }) {
       </div>
 
       <div className="grid two admin-grid">
-        <Card title="Novo / Atualizar Usuário">
+        <Card title={editing ? 'Editar Credenciais do Usuário' : 'Novo Usuário'}>
           <form className="admin-form" onSubmit={submit}>
             <label className="tt-field"><span>Nome</span><input value={form.nome} onChange={e => setForm({ ...form, nome: e.target.value })} placeholder="Nome completo" /></label>
-            <label className="tt-field"><span>Usuário</span><input value={form.usuario} onChange={e => setForm({ ...form, usuario: e.target.value })} placeholder="ex: regional.campinas" /></label>
+            <label className="tt-field"><span>Usuário / Login</span><input value={form.usuario} onChange={e => setForm({ ...form, usuario: e.target.value })} placeholder="ex: regional.campinas" /></label>
             <label className="tt-field"><span>Perfil</span><select value={form.perfil} onChange={e => setForm({ ...form, perfil: e.target.value })}><option value="ADMIN">Administrador</option><option value="RHDP">RH/DP</option><option value="SUPORTE">Suporte Regional</option></select></label>
-            <label className="tt-field"><span>PIN</span><input value={form.pin} onChange={e => setForm({ ...form, pin: e.target.value })} placeholder="PIN" /></label>
-            <label className="tt-field full"><span>Regional do Suporte</span><select value={form.regional_nome || 'MATRIZ'} onChange={e => setForm({ ...form, regional_nome: e.target.value })} disabled={form.perfil !== 'SUPORTE'}>{['MATRIZ', ...regionais.map(r => r.nome).filter(Boolean)].map(nome => <option key={nome}>{nome}</option>)}</select></label>
-            <div className="form-actions full"><Button type="submit">Salvar Usuário</Button></div>
-            {message && <div className={message.includes('sucesso') ? 'success-box full' : 'error-box full'}>{message}</div>}
+            <label className="tt-field"><span>Novo PIN</span><input value={form.pin} onChange={e => setForm({ ...form, pin: e.target.value })} placeholder="PIN" /></label>
+            <label className="tt-field"><span>Status</span><select value={String(form.ativo)} onChange={e => setForm({ ...form, ativo: e.target.value === 'true' })}><option value="true">Ativo</option><option value="false">Inativo</option></select></label>
+            <label className="tt-field"><span>Regional do Suporte</span><select value={form.regional_nome || 'MATRIZ'} onChange={e => setForm({ ...form, regional_nome: e.target.value })} disabled={form.perfil !== 'SUPORTE'}>{['MATRIZ', ...regionais.map(r => r.nome).filter(Boolean)].map(nome => <option key={nome}>{nome}</option>)}</select></label>
+            <div className="form-actions full">
+              {editing && <button type="button" className="table-action" onClick={resetForm}>Cancelar edição</button>}
+              <Button type="submit">{editing ? 'Atualizar Credenciais' : 'Salvar Usuário'}</Button>
+            </div>
+            {message && <div className={message.includes('sucesso') ? 'success-box full' : message.includes('Editando') ? 'info-box full' : 'error-box full'}>{message}</div>}
           </form>
         </Card>
 
         <Card title="Perfis e Permissões">
           <div className="permission-list">
             <div><Badge tone="blue">ADMIN</Badge><strong>Administração completa</strong><p>Usuários, base, relatórios, processos e solicitações.</p></div>
-            <div><Badge tone="green">RH/DP</Badge><strong>Operação da matriz</strong><p>Colaboradores, processos, solicitações e relatórios.</p></div>
-            <div><Badge tone="orange">SUPORTE</Badge><strong>Suporte Regional</strong><p>Importa base, faz solicitações e visualiza apenas suas solicitações.</p></div>
+            <div><Badge tone="green">RH/DP</Badge><strong>Operação da matriz</strong><p>Colaboradores, processos, solicitações, relatórios e importação da base.</p></div>
+            <div><Badge tone="orange">SUPORTE</Badge><strong>Suporte Regional</strong><p>Faz solicitações e visualiza apenas colaboradores e solicitações da própria regional.</p></div>
           </div>
         </Card>
       </div>
@@ -109,7 +137,10 @@ export function Admin({ user }) {
                   <td>{u.regional_nome || '-'}</td>
                   <td>{u.ativo === false ? <Badge tone="orange">Inativo</Badge> : <Badge tone="green">Ativo</Badge>}</td>
                   <td>{u.ultimo_acesso ? new Date(u.ultimo_acesso).toLocaleString('pt-BR') : '-'}</td>
-                  <td><button className="table-action" onClick={() => toggle(u)}>{u.ativo === false ? 'Ativar' : 'Inativar'}</button></td>
+                  <td className="table-actions">
+                    <button className="table-action" onClick={() => editUser(u)}>Editar</button>
+                    <button className="table-action" onClick={() => toggle(u)}>{u.ativo === false ? 'Ativar' : 'Inativar'}</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

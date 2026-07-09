@@ -19,6 +19,24 @@ function writeLocal(users) {
   localStorage.setItem(localKey, JSON.stringify(users));
 }
 
+function normalizePayload(payload) {
+  const user = {
+    id: payload.id || undefined,
+    nome: payload.nome?.trim(),
+    usuario: payload.usuario?.trim().toLowerCase(),
+    perfil: payload.perfil,
+    pin: payload.pin || '1234',
+    regional_nome: payload.perfil === 'SUPORTE' ? (payload.regional_nome || 'MATRIZ') : null,
+    ativo: payload.ativo ?? true
+  };
+
+  if (!user.nome || !user.usuario || !user.perfil) {
+    throw new Error('Preencha nome, usuário e perfil.');
+  }
+
+  return user;
+}
+
 export const UserService = {
   async listar() {
     if (isCloudConfigured) {
@@ -32,20 +50,27 @@ export const UserService = {
   },
 
   async salvar(payload) {
-    const user = {
-      nome: payload.nome?.trim(),
-      usuario: payload.usuario?.trim().toLowerCase(),
-      perfil: payload.perfil,
-      pin: payload.pin || '1234',
-      regional_nome: payload.perfil === 'SUPORTE' ? (payload.regional_nome || 'MATRIZ') : null,
-      ativo: payload.ativo ?? true
-    };
-
-    if (!user.nome || !user.usuario || !user.perfil) {
-      throw new Error('Preencha nome, usuário e perfil.');
-    }
+    const user = normalizePayload(payload);
 
     if (isCloudConfigured) {
+      if (user.id) {
+        const { data, error } = await supabase
+          .from('usuarios')
+          .update({
+            nome: user.nome,
+            usuario: user.usuario,
+            perfil: user.perfil,
+            pin: user.pin,
+            regional_nome: user.regional_nome,
+            ativo: user.ativo
+          })
+          .eq('id', user.id)
+          .select()
+          .single();
+        if (error) throw error;
+        return data;
+      }
+
       const { data, error } = await supabase
         .from('usuarios')
         .upsert(user, { onConflict: 'usuario' })
@@ -56,9 +81,13 @@ export const UserService = {
     }
 
     const users = readLocal();
-    const index = users.findIndex(u => u.usuario === user.usuario);
+    const index = user.id
+      ? users.findIndex(u => u.id === user.id)
+      : users.findIndex(u => u.usuario === user.usuario);
+
     if (index >= 0) users[index] = { ...users[index], ...user };
-    else users.push(user);
+    else users.push({ ...user, id: crypto.randomUUID?.() || user.usuario });
+
     writeLocal(users);
     return user;
   },
