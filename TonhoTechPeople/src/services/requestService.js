@@ -33,7 +33,7 @@ export const RequestService = {
     return local[0];
   },
 
-  async listarTodas(limite = 500) {
+  async listarTodas(limite = 500, usuario = null) {
     if (isCloudConfigured) {
       let query = supabase
         .from('solicitacoes')
