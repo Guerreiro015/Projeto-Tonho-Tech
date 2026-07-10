@@ -1,13 +1,16 @@
 import { supabase, isCloudConfigured } from './supabaseClient';
 
-const LOGIN_DOMAIN = 'usuarios.tonhotech.app';
-
 function normalizeUsername(value) {
   return String(value || '').trim().toLowerCase();
 }
 
-function technicalEmail(username) {
-  return `${normalizeUsername(username)}@${LOGIN_DOMAIN}`;
+async function resolveLoginEmail(username) {
+  const { data, error } = await supabase.rpc('resolve_login_email', {
+    p_username: normalizeUsername(username)
+  });
+
+  if (error || !data) throw new Error('Usuário ou senha inválidos.');
+  return data;
 }
 
 async function loadProfile(authUserId) {
@@ -26,23 +29,18 @@ async function loadProfile(authUserId) {
 }
 
 export const AuthService = {
-  technicalEmail,
-
   async login(username, password) {
     if (!isCloudConfigured) throw new Error('Supabase não configurado.');
     const usuario = normalizeUsername(username);
     if (!usuario || !password) throw new Error('Informe usuário e senha.');
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: technicalEmail(usuario),
-      password
-    });
+    const email = await resolveLoginEmail(usuario);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error || !data.user) throw new Error('Usuário ou senha inválidos.');
 
     const profile = await loadProfile(data.user.id);
     await supabase.rpc('touch_last_access');
-
     return profile;
   },
 
@@ -73,9 +71,18 @@ export const AuthService = {
   },
 
   async trocarSenha(novaSenha) {
-    if (!novaSenha || novaSenha.length < 8) throw new Error('A senha deve ter pelo menos 8 caracteres.');
+    if (!novaSenha || novaSenha.length < 8) {
+      throw new Error('A senha deve ter pelo menos 8 caracteres.');
+    }
+
     const { error } = await supabase.auth.updateUser({ password: novaSenha });
     if (error) throw error;
-    await supabase.rpc('mark_password_changed');
+
+    const { error: markError } = await supabase.rpc('mark_password_changed');
+    if (markError) throw markError;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Não foi possível atualizar a sessão.');
+    return loadProfile(user.id);
   }
 };

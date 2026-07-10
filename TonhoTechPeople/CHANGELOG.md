@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1
+- Login por nome de usuário usando resolução segura do e-mail interno.
+- Compatibilidade com o administrador já criado como `admin@tonhotech.com.br`.
+- Troca obrigatória de senha no primeiro acesso.
+- Mensagem genérica para usuário ou senha inválidos.
+- Migration `007_login_username_and_first_access.sql`.
+
+
 ## 0.6.0 — Security Foundation
 - Login por usuário e senha, sem exposição da lista de usuários.
 - Supabase Auth e restauração segura de sessão.

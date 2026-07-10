@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Login } from './pages/Login';
+import { FirstAccess } from './pages/FirstAccess';
 import { Home } from './pages/Home';
 import { ImportBase } from './pages/ImportBase';
 import { People } from './pages/People';
@@ -42,6 +43,7 @@ export default function App() {
 
   if (booting) return <div className="app-loading"><div className="loading-mark">TT</div><strong>TONHO TECH People</strong><span>Validando sessão segura...</span></div>;
   if (!user) return <Login onLogin={setUser} />;
+  if (user.primeiro_acesso) return <FirstAccess user={user} onComplete={setUser} onLogout={logout} />;
 
   function renderPage() {
     if (currentPage === 'Home') return <Home user={user} navigate={navigate} />;
