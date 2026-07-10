@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { ImportBase } from './pages/ImportBase';
@@ -10,38 +10,42 @@ import { Dossie } from './pages/Dossie';
 import { Reports } from './pages/Reports';
 import { Admin } from './pages/Admin';
 import { AppLayout } from './layouts/AppLayout';
+import { AuthService } from './services/authService';
 import './styles.css';
 
 export default function App() {
-  const [user, setUser] = useState(() => JSON.parse(sessionStorage.getItem('tt_user') || 'null'));
+  const [user, setUser] = useState(null);
+  const [booting, setBooting] = useState(true);
   const [currentPage, setCurrentPage] = useState('Home');
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [initialProcessId, setInitialProcessId] = useState(null);
 
-  function login(u) {
-    sessionStorage.setItem('tt_user', JSON.stringify(u));
-    setUser(u);
-  }
+  useEffect(() => {
+    let mounted = true;
+    AuthService.restoreSession().then(profile => {
+      if (mounted) { setUser(profile); setBooting(false); }
+    });
+    const { data: listener } = AuthService.onAuthStateChange(profile => {
+      if (mounted) setUser(profile);
+    });
+    return () => { mounted = false; listener?.subscription?.unsubscribe(); };
+  }, []);
 
-  function logout() {
-    sessionStorage.removeItem('tt_user');
+  async function logout() {
+    await AuthService.logout();
     setUser(null);
+    setCurrentPage('Home');
   }
 
-  function navigate(page) {
-    setCurrentPage(page);
-  }
+  function navigate(page) { setCurrentPage(page); }
+  function startProcess(processId) { setInitialProcessId(processId); setCurrentPage('Nova Solicitação'); }
 
-  function startProcess(processId) {
-    setInitialProcessId(processId);
-    setCurrentPage('Nova Solicitação');
-  }
-
-  if (!user) return <Login onLogin={login} />;
+  if (booting) return <div className="app-loading"><div className="loading-mark">TT</div><strong>TONHO TECH People</strong><span>Validando sessão segura...</span></div>;
+  if (!user) return <Login onLogin={setUser} />;
 
   function renderPage() {
     if (currentPage === 'Home') return <Home user={user} navigate={navigate} />;
-    if (currentPage === 'Importar Base') return user.perfil === 'SUPORTE' ? <Placeholder title="Acesso restrito" message="O perfil Suporte Regional não possui permissão para carregar a base. Solicite a atualização ao RH/DP ou Administrador." /> : <ImportBase user={user} />;
+    if (currentPage === 'Importar Base') return user.perfil === 'SUPORTE' ? <Placeholder title="Acesso restrito" message="O perfil Suporte Regional não possui permissão para carregar a base." /> : <ImportBase user={user} />;
     if (currentPage === 'Colaboradores') return <People user={user} onSelect={(p) => { setSelectedPerson(p); setCurrentPage('Dossiê'); }} />;
     if (currentPage === 'Processos') return <Processes onStart={startProcess} />;
     if (currentPage === 'Nova Solicitação') return <NewRequest user={user} initialProcessId={initialProcessId} />;

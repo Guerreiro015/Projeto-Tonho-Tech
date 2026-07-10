@@ -22,6 +22,9 @@ export const RequestService = {
     };
 
     if (isCloudConfigured) {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) throw new Error('Sessão expirada. Entre novamente.');
+      req.criado_por = authUser.id;
       const { data, error } = await supabase.from('solicitacoes').insert(req).select().single();
       if (error) throw error;
       return data;

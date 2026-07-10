@@ -1,6 +1,6 @@
 {
   "name": "tonho-tech-people-web",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+    "supabase": "^2.109.1",
     "vite": "^5.4.11"
   },
   "engines": {
