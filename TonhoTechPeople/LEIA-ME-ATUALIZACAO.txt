@@ -1,0 +1,28 @@
+TONHO TECH People Web 0.6.1 — Patch Seguro
+
+Este pacote contém somente os arquivos de código que precisam ser substituídos no projeto atual.
+Ele NÃO contém package.json, package-lock.json, .env, node_modules, dist, migrations ou Edge Functions.
+Assim, preserva a configuração local, a Supabase CLI instalada e o histórico do projeto.
+
+Arquivos a copiar para a pasta atual TonhoTechPeople:
+
+src/App.jsx
+src/styles.css
+src/pages/Login.jsx
+src/pages/FirstAccess.jsx
+src/pages/Admin.jsx
+src/services/authService.js
+src/services/userService.js
+src/services/requestService.js
+
+Ao copiar, confirme a substituição dos arquivos com o mesmo nome.
+
+Depois, no terminal dentro de TonhoTechPeople:
+1) npm run dev
+2) Teste o login: usuário admin + a senha cadastrada no Supabase Auth.
+3) Se pedir troca de senha, defina uma nova senha com no mínimo 8 caracteres.
+4) Pare o servidor com Ctrl+C.
+5) npm run build
+6) Se o build concluir, faça Commit e Push no GitHub Desktop.
+
+Não copie novamente as migrations 006/007 e não republique admin-users: essas etapas já foram concluídas.
