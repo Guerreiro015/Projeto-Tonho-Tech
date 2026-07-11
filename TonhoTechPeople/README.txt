@@ -18,3 +18,4 @@ Melhorias:
 - Exibição e cópia das credenciais após cadastro/reset.
 - Botão Desativar/Ativar mais claro.
 - Proteção contra desativar a própria conta.
+Deploy Cloudflare
