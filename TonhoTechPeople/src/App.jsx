@@ -23,13 +23,27 @@ export default function App() {
 
   useEffect(() => {
     let mounted = true;
-    AuthService.restoreSession().then(profile => {
-      if (mounted) { setUser(profile); setBooting(false); }
-    });
+
+    async function initializeSession() {
+      try {
+        const profile = await AuthService.restoreSession();
+        if (mounted) setUser(profile);
+      } finally {
+        // A tela nunca fica presa, mesmo com token vencido ou falha de rede.
+        if (mounted) setBooting(false);
+      }
+    }
+
+    initializeSession();
+
     const { data: listener } = AuthService.onAuthStateChange(profile => {
       if (mounted) setUser(profile);
     });
-    return () => { mounted = false; listener?.subscription?.unsubscribe(); };
+
+    return () => {
+      mounted = false;
+      listener?.subscription?.unsubscribe();
+    };
   }, []);
 
   async function logout() {

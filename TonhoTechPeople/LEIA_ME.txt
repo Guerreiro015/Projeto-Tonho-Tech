@@ -1,0 +1,18 @@
+TONHO TECH People — Correção de sessão travada
+
+Arquivos alterados:
+- src/App.jsx
+- src/services/authService.js
+
+A correção:
+- valida a sessão no servidor em vez de confiar apenas no token local;
+- remove automaticamente sessão vencida ou inválida;
+- aplica tempo limite de 8 segundos;
+- evita deadlock no callback onAuthStateChange;
+- garante que a tela "Validando sessão segura..." sempre finalize.
+
+Instalação:
+1. Copie a pasta src para a raiz do projeto.
+2. Confirme a substituição dos arquivos.
+3. Execute npm run build.
+4. Faça commit e push.
