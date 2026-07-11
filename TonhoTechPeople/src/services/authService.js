@@ -1,4 +1,5 @@
 import { supabase, isCloudConfigured } from './supabaseClient';
+import { AuditService } from './auditService';
 
 function normalizeUsername(value) {
   return String(value || '').trim().toLowerCase();
@@ -41,6 +42,7 @@ export const AuthService = {
 
     const profile = await loadProfile(data.user.id);
     await supabase.rpc('touch_last_access');
+    await AuditService.registrar('LOGIN', 'usuarios', profile.id, { perfil: profile.perfil, regional: profile.regional_nome });
     return profile;
   },
 
@@ -80,6 +82,8 @@ export const AuthService = {
 
     const { error: markError } = await supabase.rpc('mark_password_changed');
     if (markError) throw markError;
+
+    await AuditService.registrar('TROCA_SENHA', 'usuarios');
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Não foi possível atualizar a sessão.');

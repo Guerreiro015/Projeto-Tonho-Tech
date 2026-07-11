@@ -23,11 +23,25 @@ Deno.serve(async (req) => {
     if (callerError || !caller) return json({ error: 'Sessão inválida.' }, 401);
 
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { autoRefreshToken: false, persistSession: false } });
-    const { data: callerProfile } = await admin.from('usuarios').select('perfil,ativo').eq('auth_id', caller.id).maybeSingle();
+    const { data: callerProfile } = await admin.from('usuarios').select('nome,usuario,perfil,ativo').eq('auth_id', caller.id).maybeSingle();
     if (!callerProfile || callerProfile.ativo === false || callerProfile.perfil !== 'ADMIN') return json({ error: 'Somente o Administrador pode gerenciar usuários.' }, 403);
 
     const body = await req.json();
     const action = body.action;
+
+    const audit = async (acao: string, entidadeId: string | null, detalhes: Record<string, unknown> = {}) => {
+      const { error } = await admin.from('auditoria').insert({
+        ator_auth_id: caller.id,
+        ator_nome: callerProfile?.nome,
+        ator_usuario: callerProfile?.usuario,
+        ator_perfil: callerProfile?.perfil,
+        acao,
+        entidade: 'usuarios',
+        entidade_id: entidadeId,
+        detalhes
+      });
+      if (error) console.warn('Falha ao registrar auditoria:', error.message);
+    };
 
     if (action === 'create') {
       const u = body.user;
@@ -43,6 +57,7 @@ Deno.serve(async (req) => {
         ativo: u.ativo, primeiro_acesso: u.primeiro_acesso !== false
       }).select().single();
       if (profileError) { await admin.auth.admin.deleteUser(created.user.id); throw profileError; }
+      await audit('USUARIO_CRIADO', data.id, { nome: data.nome, usuario: data.usuario, perfil: data.perfil, regional: data.regional_nome });
       return json({ user: data });
     }
 
@@ -59,6 +74,7 @@ Deno.serve(async (req) => {
         ativo: u.ativo, primeiro_acesso: u.primeiro_acesso
       }).eq('id', u.id).select().single();
       if (profileError) throw profileError;
+      await audit('USUARIO_ALTERADO', data.id, { nome: data.nome, usuario: data.usuario, perfil: data.perfil, regional: data.regional_nome, ativo: data.ativo });
       return json({ user: data });
     }
 
@@ -67,6 +83,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
       const { error: profileError } = await admin.from('usuarios').update({ ativo: body.ativo }).eq('id', body.userId);
       if (profileError) throw profileError;
+      await audit(body.ativo ? 'USUARIO_ATIVADO' : 'USUARIO_DESATIVADO', body.userId, { ativo: body.ativo });
       return json({ success: true });
     }
 
@@ -74,6 +91,7 @@ Deno.serve(async (req) => {
       const { error } = await admin.auth.admin.updateUserById(body.authId, { password: body.senha });
       if (error) throw error;
       await admin.from('usuarios').update({ primeiro_acesso: true }).eq('id', body.userId);
+      await audit('SENHA_REDEFINIDA', body.userId, { primeiro_acesso: true });
       return json({ success: true });
     }
 

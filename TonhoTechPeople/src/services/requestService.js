@@ -42,18 +42,18 @@ export const RequestService = {
         .from('solicitacoes')
         .select('*')
         .order('criado_em', { ascending: false });
-      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) query = query.eq('regional_colaborador', usuario.regional_nome);
       const { data, error } = await query.limit(limite);
       if (!error) return data || [];
     }
     const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
-    return (usuario?.perfil === 'SUPORTE' ? local.filter(item => item.usuario === usuario.usuario) : local).slice(0, limite);
+    return (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome ? local.filter(item => item.regional_colaborador === usuario.regional_nome) : local).slice(0, limite);
   },
 
   async minhas(usuario) {
     if (isCloudConfigured) {
       let query = supabase.from('solicitacoes').select('*').order('criado_em', { ascending: false }).limit(50);
-      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) query = query.eq('regional_colaborador', usuario.regional_nome);
       const { data, error } = await query;
       if (!error) return data || [];
     }
@@ -63,12 +63,12 @@ export const RequestService = {
   async contar(usuario) {
     if (isCloudConfigured) {
       let query = supabase.from('solicitacoes').select('*', { count: 'exact', head: true });
-      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) query = query.eq('regional_colaborador', usuario.regional_nome);
       const { count, error } = await query;
       if (!error) return count || 0;
     }
     const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
-    return usuario?.perfil === 'SUPORTE' ? local.filter(item => item.usuario === usuario.usuario).length : local.length;
+    return usuario?.perfil === 'SUPORTE' && usuario?.regional_nome ? local.filter(item => item.regional_colaborador === usuario.regional_nome).length : local.length;
   },
 
   async hoje(usuario) {
@@ -79,12 +79,12 @@ export const RequestService = {
         .from('solicitacoes')
         .select('*', { count: 'exact', head: true })
         .gte('criado_em', inicio.toISOString());
-      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) query = query.eq('regional_colaborador', usuario.regional_nome);
       const { count, error } = await query;
       if (!error) return count || 0;
     }
     const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
-    return local.filter(item => new Date(item.criado_em || Date.now()) >= inicio && (usuario?.perfil === 'SUPORTE' ? item.usuario === usuario.usuario : true)).length;
+    return local.filter(item => new Date(item.criado_em || Date.now()) >= inicio && (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome ? item.regional_colaborador === usuario.regional_nome : true)).length;
   },
 
   async ultimas(limite = 6, usuario) {
@@ -93,11 +93,11 @@ export const RequestService = {
         .from('solicitacoes')
         .select('*')
         .order('criado_em', { ascending: false });
-      if (usuario?.perfil === 'SUPORTE') query = query.eq('usuario', usuario.usuario);
+      if (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome) query = query.eq('regional_colaborador', usuario.regional_nome);
       const { data, error } = await query.limit(limite);
       if (!error) return data || [];
     }
     const local = JSON.parse(localStorage.getItem('tt_people_solicitacoes') || '[]');
-    return (usuario?.perfil === 'SUPORTE' ? local.filter(item => item.usuario === usuario.usuario) : local).slice(0, limite);
+    return (usuario?.perfil === 'SUPORTE' && usuario?.regional_nome ? local.filter(item => item.regional_colaborador === usuario.regional_nome) : local).slice(0, limite);
   }
 };

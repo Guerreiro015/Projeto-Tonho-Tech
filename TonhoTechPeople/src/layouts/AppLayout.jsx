@@ -3,8 +3,8 @@ import { Button } from '../components/Button';
 
 export function AppLayout({ user, currentPage, setCurrentPage, logout, children }) {
   const adminItems = ['Home', 'Colaboradores', 'Processos', 'Solicitações', 'Relatórios', 'Administração'];
-  const rhItems = ['Home', 'Colaboradores', 'Processos', 'Solicitações', 'Relatórios'];
-  const suporteItems = ['Home', 'Nova Solicitação', 'Minhas Solicitações'];
+  const rhItems = ['Home', 'Colaboradores', 'Importar Base', 'Processos', 'Solicitações', 'Relatórios'];
+  const suporteItems = ['Home', 'Colaboradores', 'Nova Solicitação', 'Minhas Solicitações'];
   const items = user.perfil === 'ADMIN' ? adminItems : user.perfil === 'RHDP' ? rhItems : suporteItems;
 
   const labels = {
@@ -16,8 +16,12 @@ export function AppLayout({ user, currentPage, setCurrentPage, logout, children 
     Administração: 'Administração',
     'Importar Base': 'Importar Base',
     'Nova Solicitação': 'Nova Solicitação',
-    'Minhas Solicitações': 'Minhas Solicitações'
+    'Minhas Solicitações': 'Solicitações da Regional'
   };
+
+  const scopeLabel = user.perfil === 'SUPORTE'
+    ? (user.regional_nome || 'Regional não vinculada')
+    : 'Todas as regionais';
 
   return (
     <div className="app-shell">
@@ -31,7 +35,8 @@ export function AppLayout({ user, currentPage, setCurrentPage, logout, children 
         <div className="sidebar-footer">
           <small>Usuário conectado</small>
           <strong>{user.nome}</strong>
-          <span>{user.perfil}{user.regional_nome ? ` • ${user.regional_nome}` : ''}</span>
+          <span>{user.perfil === 'RHDP' ? 'RH/DP' : user.perfil}</span>
+          <small className="sidebar-scope">Escopo: {scopeLabel}</small>
           <Button variant="ghost" onClick={logout}>Sair</Button>
         </div>
       </aside>
@@ -41,7 +46,10 @@ export function AppLayout({ user, currentPage, setCurrentPage, logout, children 
             <h1>{labels[currentPage] || currentPage}</h1>
             <p>TONHO TECH People • Gestão Inteligente de Pessoas</p>
           </div>
-          <div className="cloud-pill">☁️ Supabase Online</div>
+          <div className="topbar-actions">
+            <div className="scope-pill">📍 {scopeLabel}</div>
+            <div className="cloud-pill">☁️ Supabase Online</div>
+          </div>
         </header>
         <div className="page-content">{children}</div>
       </main>

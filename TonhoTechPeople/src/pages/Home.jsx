@@ -7,6 +7,13 @@ import { PeopleService } from '../services/peopleService';
 import { RequestService } from '../services/requestService';
 import { RegionalService } from '../services/regionalService';
 
+function greeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Bom dia';
+  if (hour < 18) return 'Boa tarde';
+  return 'Boa noite';
+}
+
 export function Home({ user, navigate }) {
   const [metrics, setMetrics] = useState({ colaboradores: 0, solicitacoes: 0, hoje: 0, regionais: 0, ultimas: [] });
 
@@ -20,50 +27,54 @@ export function Home({ user, navigate }) {
     ]).then(([colaboradores, solicitacoes, hoje, regionais, ultimas]) => {
       setMetrics({ colaboradores, solicitacoes, hoje, regionais, ultimas });
     });
-  }, []);
+  }, [user]);
+
+  const isSupport = user.perfil === 'SUPORTE';
+  const scope = isSupport ? (user.regional_nome || 'Regional não vinculada') : 'Todas as regionais';
 
   return (
     <div className="home-stack">
       <section className="welcome-panel">
         <div>
           <span className="eyebrow">TONHO TECH People Web</span>
-          <h2>Bom trabalho, {user.nome} 👋</h2>
-          <p>Gestão inteligente de pessoas, processos e regionais em ambiente cloud.</p>
+          <h2>{greeting()}, {user.nome} 👋</h2>
+          <p>{isSupport ? `Operação autorizada para a Regional ${scope}.` : 'Gestão central de pessoas, processos e regionais em ambiente cloud.'}</p>
+          <div className="welcome-scope"><strong>Escopo de acesso:</strong> {scope}</div>
         </div>
         <div className="welcome-actions">
           <button onClick={() => navigate('Nova Solicitação')}>+ Nova Solicitação</button>
-          {user.perfil !== 'SUPORTE' && <button onClick={() => navigate('Colaboradores')}>Pesquisar Colaborador</button>}
+          <button onClick={() => navigate('Colaboradores')}>Pesquisar Colaborador</button>
         </div>
       </section>
 
       <div className="stats-grid">
-        <StatCard icon="👥" label="Colaboradores" value={metrics.colaboradores} hint="Base online" />
-        <StatCard icon="📄" label="Solicitações" value={metrics.solicitacoes} hint="Total geral" tone="green" />
+        <StatCard icon="👥" label="Colaboradores" value={metrics.colaboradores} hint={isSupport ? scope : 'Base online'} />
+        <StatCard icon="📄" label="Solicitações" value={metrics.solicitacoes} hint={isSupport ? 'Da regional' : 'Total geral'} tone="green" />
         <StatCard icon="⚡" label="Hoje" value={metrics.hoje} hint="Geradas no dia" tone="orange" />
-        <StatCard icon="🏢" label="Regionais" value={metrics.regionais} hint="Coluna Folha" tone="purple" />
+        <StatCard icon="🏢" label={isSupport ? 'Regional' : 'Regionais'} value={isSupport ? scope : metrics.regionais} hint={isSupport ? 'Acesso autorizado' : 'Coluna Folha'} tone="purple" />
       </div>
 
       <div className="grid two">
         <Card title="Status da Plataforma">
           <div className="status-grid">
             <span><Badge tone="green">Online</Badge> Supabase configurado</span>
-            <span><Badge tone="blue">Perfil</Badge> {user.perfil}</span>
+            <span><Badge tone="blue">Perfil</Badge> {user.perfil === 'RHDP' ? 'RH/DP' : user.perfil}</span>
             <span><Badge tone="green">Base</Badge> {metrics.colaboradores ? 'Carregada' : 'Aguardando importação'}</span>
-            {user.regional_nome && <span><Badge tone="orange">Regional</Badge> {user.regional_nome}</span>}
+            <span><Badge tone="orange">Escopo</Badge> {scope}</span>
           </div>
         </Card>
 
         <Card title="Ações Rápidas">
           <div className="quick-grid">
             <button onClick={() => navigate('Nova Solicitação')}>📝 Nova Solicitação</button>
-            {user.perfil !== 'SUPORTE' && <button onClick={() => navigate('Importar Base')}>📥 Importar Base</button>}
-            <button onClick={() => navigate('Minhas Solicitações')}>📋 Solicitações</button>
-            {user.perfil !== 'SUPORTE' && <button onClick={() => navigate('Relatórios')}>📊 Relatórios</button>}
+            {!isSupport && <button onClick={() => navigate('Importar Base')}>📥 Importar Base</button>}
+            <button onClick={() => navigate(isSupport ? 'Minhas Solicitações' : 'Solicitações')}>📋 Solicitações</button>
+            {!isSupport && <button onClick={() => navigate('Relatórios')}>📊 Relatórios</button>}
           </div>
         </Card>
       </div>
 
-      <Card title="Últimas Solicitações Online">
+      <Card title={isSupport ? `Últimas Solicitações — ${scope}` : 'Últimas Solicitações Online'}>
         {metrics.ultimas.length === 0 ? (
           <EmptyState icon="📭" title="Nenhuma solicitação ainda" message="As solicitações geradas aparecerão aqui automaticamente." />
         ) : (
