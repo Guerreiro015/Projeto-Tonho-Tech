@@ -10,6 +10,7 @@ import { Processes } from './pages/Processes';
 import { Dossie } from './pages/Dossie';
 import { Reports } from './pages/Reports';
 import { Admin } from './pages/Admin';
+import { Audit } from './pages/Audit';
 import { AppLayout } from './layouts/AppLayout';
 import { AuthService } from './services/authService';
 import './styles.css';
@@ -69,6 +70,7 @@ export default function App() {
     if (currentPage === 'Dossiê') return <Dossie person={selectedPerson} onNewRequest={() => setCurrentPage('Nova Solicitação')} />;
     if (currentPage === 'Relatórios') return <Reports user={user} />;
     if (currentPage === 'Administração') return <Admin user={user} />;
+    if (currentPage === 'Auditoria') return <Audit user={user} />;
     return <Placeholder title={currentPage} />;
   }
 

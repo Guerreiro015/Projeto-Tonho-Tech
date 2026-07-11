@@ -1,18 +1,16 @@
-TONHO TECH People — Correção de sessão travada
+TONHO TECH People 0.7.3 — Login por sessão da janela
 
-Arquivos alterados:
-- src/App.jsx
-- src/services/authService.js
+ALTERAÇÃO
+- A sessão de autenticação passa a usar sessionStorage.
+- Atualizar a página mantém o usuário conectado.
+- Fechar a aba ou o navegador encerra a sessão local.
+- Ao abrir o sistema novamente, o login será exigido.
+- Uma sessão antiga salva em localStorage é removida automaticamente.
 
-A correção:
-- valida a sessão no servidor em vez de confiar apenas no token local;
-- remove automaticamente sessão vencida ou inválida;
-- aplica tempo limite de 8 segundos;
-- evita deadlock no callback onAuthStateChange;
-- garante que a tela "Validando sessão segura..." sempre finalize.
+INSTALAÇÃO
+1. Copie a pasta src deste patch.
+2. Cole na raiz do projeto TonhoTechPeople.
+3. Confirme a substituição do arquivo.
+4. Execute npm run dev e faça o teste descrito pelo assistente.
 
-Instalação:
-1. Copie a pasta src para a raiz do projeto.
-2. Confirme a substituição dos arquivos.
-3. Execute npm run build.
-4. Faça commit e push.
+Não há migration nem novo deploy de Edge Function nesta atualização.

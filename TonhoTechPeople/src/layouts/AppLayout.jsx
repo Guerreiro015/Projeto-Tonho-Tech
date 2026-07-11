@@ -2,7 +2,7 @@ import { Logo } from '../brand/Logo';
 import { Button } from '../components/Button';
 
 export function AppLayout({ user, currentPage, setCurrentPage, logout, children }) {
-  const adminItems = ['Home', 'Colaboradores', 'Processos', 'Solicitações', 'Relatórios', 'Administração'];
+  const adminItems = ['Home', 'Colaboradores', 'Processos', 'Solicitações', 'Relatórios', 'Administração', 'Auditoria'];
   const rhItems = ['Home', 'Colaboradores', 'Importar Base', 'Processos', 'Solicitações', 'Relatórios'];
   const suporteItems = ['Home', 'Colaboradores', 'Nova Solicitação', 'Minhas Solicitações'];
   const items = user.perfil === 'ADMIN' ? adminItems : user.perfil === 'RHDP' ? rhItems : suporteItems;
@@ -14,6 +14,7 @@ export function AppLayout({ user, currentPage, setCurrentPage, logout, children 
     Solicitações: 'Solicitações',
     Relatórios: 'Relatórios',
     Administração: 'Administração',
+    Auditoria: 'Auditoria',
     'Importar Base': 'Importar Base',
     'Nova Solicitação': 'Nova Solicitação',
     'Minhas Solicitações': 'Solicitações da Regional'
