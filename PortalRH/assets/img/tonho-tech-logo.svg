@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 240" role="img" aria-label="TONHO TECH People logo horizontal">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2D7FF9"/><stop offset="1" stop-color="#0F3D75"/></linearGradient>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#34C759"/><stop offset="1" stop-color="#2D7FF9"/></linearGradient>
+  </defs>
+  <rect width="780" height="240" rx="38" fill="#F8FAFC"/>
+  <g transform="translate(38 38)">
+    <rect width="164" height="164" rx="42" fill="url(#g)"/>
+    <path d="M43 44h78v28H95v76H69V72H43z" fill="#fff"/>
+    <path d="M116 44h28v76h34v28h-62z" fill="#BFE0FF"/>
+    <circle cx="82" cy="133" r="11" fill="#34C759"/>
+    <circle cx="50" cy="133" r="8" fill="#fff" opacity=".9"/>
+    <circle cx="114" cy="133" r="8" fill="#fff" opacity=".9"/>
+  </g>
+  <g transform="translate(235 54)">
+    <text x="0" y="48" font-family="Poppins, Arial, sans-serif" font-size="50" font-weight="900" fill="#0F3D75" letter-spacing="1.2">TONHO TECH</text>
+    <text x="2" y="88" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#2B2D33">Software &amp; Business Solutions</text>
+    <rect x="2" y="106" width="360" height="7" rx="4" fill="url(#a)"/>
+    <text x="2" y="158" font-family="Poppins, Arial, sans-serif" font-size="37" font-weight="900" fill="#2D7FF9">People</text>
+    <text x="126" y="156" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#64748B">Gestão Inteligente de Pessoas</text>
+  </g>
+</svg>
