@@ -14,3 +14,4 @@ INSTALAÇÃO
 4. Execute npm run dev e faça o teste descrito pelo assistente.
 
 Não há migration nem novo deploy de Edge Function nesta atualização.
+12/07/2026 - 19:48
