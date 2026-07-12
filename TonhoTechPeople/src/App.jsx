@@ -11,6 +11,7 @@ import { Dossie } from './pages/Dossie';
 import { Reports } from './pages/Reports';
 import { Admin } from './pages/Admin';
 import { Audit } from './pages/Audit';
+import { Library } from './pages/Library';
 import { AppLayout } from './layouts/AppLayout';
 import { AuthService } from './services/authService';
 import './styles.css';
@@ -71,6 +72,7 @@ export default function App() {
     if (currentPage === 'Relatórios') return <Reports user={user} />;
     if (currentPage === 'Administração') return <Admin user={user} />;
     if (currentPage === 'Auditoria') return <Audit user={user} />;
+    if (currentPage === 'Biblioteca RH') return <Library user={user} />;
     return <Placeholder title={currentPage} />;
   }
 

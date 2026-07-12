@@ -1,17 +1,9 @@
-TONHO TECH People 0.7.3 — Login por sessão da janela
+TONHO TECH People 0.8.0 — Biblioteca RH
 
-ALTERAÇÃO
-- A sessão de autenticação passa a usar sessionStorage.
-- Atualizar a página mantém o usuário conectado.
-- Fechar a aba ou o navegador encerra a sessão local.
-- Ao abrir o sistema novamente, o login será exigido.
-- Uma sessão antiga salva em localStorage é removida automaticamente.
+1. Execute database/migrations/009_biblioteca_rh.sql no SQL Editor do Supabase.
+2. Copie a pasta src para a raiz do projeto e confirme a substituição.
+3. Execute npm run dev e teste a Biblioteca RH.
+4. ADMIN e RH/DP podem criar, editar, publicar e arquivar conteúdos.
+5. SUPORTE possui acesso somente para consulta de conteúdos publicados.
 
-INSTALAÇÃO
-1. Copie a pasta src deste patch.
-2. Cole na raiz do projeto TonhoTechPeople.
-3. Confirme a substituição do arquivo.
-4. Execute npm run dev e faça o teste descrito pelo assistente.
-
-Não há migration nem novo deploy de Edge Function nesta atualização.
-12/07/2026 - 19:48
+Anexos e versionamento detalhado serão adicionados na próxima etapa.
