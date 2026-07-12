@@ -97,14 +97,20 @@ export const MODULOS = [
       {id:'observacoes', label:'Observações', tipo:'textarea'}
     ]
   },
+
   {
-    id:'crow-odonto', titulo:'Exclusão Crow Odonto', categoria:'Benefícios', icone:'fa-tooth', cor:'ciano',
-    descricao:'Solicitar exclusão do benefício odontológico.',
+    id:'crow-odonto', titulo:'Exclusão de Convênio Odontológico', categoria:'Benefícios', icone:'fa-tooth', cor:'ciano',
+    descricao:'Solicitar exclusão do colaborador e/ou dependentes do convênio odontológico.',
     campos:[
-      {id:'motivo', label:'Motivo', tipo:'textarea', obrigatorio:true},
-      {id:'dependentes', label:'Possui dependentes?', tipo:'select', opcoes:['Não','Sim']}
+      {id:'tipoExclusao', label:'Tipo de exclusão', tipo:'select', opcoes:['Titular','Dependente','Titular e Dependentes'], obrigatorio:true},
+      {id:'motivo', label:'Motivo', tipo:'select', opcoes:['Pedido do Colaborador','Desligamento','Inclusão em outro plano','Óbito','Outro'], obrigatorio:true},
+      {id:'dataExclusao', label:'Data da exclusão', tipo:'date', obrigatorio:true},
+      {id:'dependentes', label:'Dependentes a excluir', tipo:'textarea'},
+      {id:'observacoes', label:'Observações', tipo:'textarea'}
     ]
   },
+
+ 
   {
     id:'convocacao', titulo:'Convocação de Trabalho', categoria:'RH', icone:'fa-bullhorn', cor:'laranja',
     descricao:'Emitir convocação de trabalho.',
