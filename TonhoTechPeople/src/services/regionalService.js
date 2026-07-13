@@ -3,7 +3,7 @@ import { supabase, isCloudConfigured } from './supabaseClient';
 export const RegionalService = {
   async listar() {
     if (isCloudConfigured) {
-      const { data, error } = await supabase.from('regionais').select('*').order('nome');
+      const { data, error } = await supabase.from('regionais').select('*').eq('ativo', true).order('nome');
       if (!error) return data || [];
     }
     const cache = JSON.parse(localStorage.getItem('tt_people_colaboradores_cache') || '[]');

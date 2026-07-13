@@ -18,15 +18,41 @@ export function Home({ user, navigate }) {
   const [metrics, setMetrics] = useState({ colaboradores: 0, solicitacoes: 0, hoje: 0, regionais: 0, ultimas: [] });
 
   useEffect(() => {
-    Promise.all([
-      PeopleService.contar(user),
-      RequestService.contar(user),
-      RequestService.hoje(user),
-      user.perfil === 'SUPORTE' ? Promise.resolve(user.regional_nome ? 1 : 0) : RegionalService.contar(),
-      RequestService.ultimas(5, user)
-    ]).then(([colaboradores, solicitacoes, hoje, regionais, ultimas]) => {
-      setMetrics({ colaboradores, solicitacoes, hoje, regionais, ultimas });
-    });
+    let active = true;
+
+    async function loadMetrics() {
+      const [colaboradores, solicitacoes, hoje, regionais, ultimas] = await Promise.all([
+        PeopleService.contar(user),
+        RequestService.contar(user),
+        RequestService.hoje(user),
+        user.perfil === 'SUPORTE' ? Promise.resolve(user.regional_nome ? 1 : 0) : RegionalService.contar(),
+        RequestService.ultimas(5, user)
+      ]);
+
+      if (active) {
+        setMetrics({ colaboradores, solicitacoes, hoje, regionais, ultimas });
+      }
+    }
+
+    function handleBaseUpdated() {
+      loadMetrics();
+    }
+
+    function handleVisibility() {
+      if (document.visibilityState === 'visible') loadMetrics();
+    }
+
+    loadMetrics();
+    window.addEventListener('tt:base-atualizada', handleBaseUpdated);
+    window.addEventListener('focus', handleBaseUpdated);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      active = false;
+      window.removeEventListener('tt:base-atualizada', handleBaseUpdated);
+      window.removeEventListener('focus', handleBaseUpdated);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }, [user]);
 
   const isSupport = user.perfil === 'SUPORTE';

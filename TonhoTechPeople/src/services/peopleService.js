@@ -72,16 +72,25 @@ export const PeopleService = {
 
     const regionais = [...new Set(colaboradores.map(c => c.regional).filter(Boolean))];
 
+    let resultadoServidor = null;
+
     if (isCloudConfigured) {
-      for (const nome of regionais) {
-        await supabase.from('regionais').upsert({ nome, ativo: true }, { onConflict: 'nome' });
-      }
-      const { error } = await supabase.from('colaboradores').upsert(colaboradores, { onConflict: 'matricula' });
+      const { data, error } = await supabase.rpc('replace_colaboradores', {
+        p_colaboradores: colaboradores
+      });
       if (error) throw error;
+      resultadoServidor = data;
     }
 
     localStorage.setItem('tt_people_colaboradores_cache', JSON.stringify(colaboradores));
-    return { colaboradores, regionais };
+    localStorage.setItem('tt_people_base_updated_at', new Date().toISOString());
+
+    return {
+      colaboradores,
+      regionais,
+      totalColaboradores: resultadoServidor?.colaboradores ?? colaboradores.length,
+      totalRegionais: resultadoServidor?.regionais ?? regionais.length
+    };
   },
 
   async pesquisar(texto, usuario) {
@@ -128,3 +137,5 @@ export const PeopleService = {
     return cache.length;
   }
 };
+
+

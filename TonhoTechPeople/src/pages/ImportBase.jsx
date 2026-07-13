@@ -12,6 +12,7 @@ export function ImportBase({ user }) {
     try {
       const data = await PeopleService.importarExcel(file);
       setResult(data);
+      window.dispatchEvent(new CustomEvent('tt:base-atualizada', { detail: data }));
     } catch (err) {
       alert(err.message);
     } finally {

@@ -1,9 +1,7 @@
-TONHO TECH People 0.8.0 — Biblioteca RH
+TONHO TECH People 0.8.1 — Atualização da Base e Dashboard
 
-1. Execute database/migrations/009_biblioteca_rh.sql no SQL Editor do Supabase.
+1. Execute database/migrations/010_replace_people_base.sql no SQL Editor do Supabase.
 2. Copie a pasta src para a raiz do projeto e confirme a substituição.
-3. Execute npm run dev e teste a Biblioteca RH.
-4. ADMIN e RH/DP podem criar, editar, publicar e arquivar conteúdos.
-5. SUPORTE possui acesso somente para consulta de conteúdos publicados.
-
-Anexos e versionamento detalhado serão adicionados na próxima etapa.
+3. Execute npm run dev.
+4. Importe novamente a planilha.
+5. Volte para Início: os totais de colaboradores e regionais serão recarregados automaticamente.
