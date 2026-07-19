@@ -40,7 +40,8 @@ export const PROCESSOS = [
   ]
 },
   { id: 'reembolso', titulo: 'Reembolso', categoria: 'Financeiro', icon: '💰', cor: 'purple', descricao: 'Autorização e registro de reembolso.', campos: [{ key: 'valor', label: 'Valor', type: 'text' }, { key: 'motivo', label: 'Motivo', type: 'text' }, { key: 'observacoes', label: 'Observações', type: 'textarea' }] },
-  { id: 'movimentação-setor', titulo: 'Movimentação de Setor', categoria: 'Operacional', icon: '💰', cor: 'purple', descricao: 'Autorização e registro de movimentação de setor.', campos: [{ key: 'Setor Origem', label: 'Setor Origem', type: 'text' }, { key: 'Setor Destino', label: 'Setor Destino', type: 'text' },{ key: 'Horário Destino', label: 'Horário Destino', type: 'text' }, { key: 'observacoes', label: 'Observações', type: 'textarea' }] },
+  { id: 'movimentação-setor', titulo: 'Movimentação de Setor', categoria: 'Operacional', icon: '🏢', cor: 'purple', descricao: 'Autorização e registro de movimentação de setor.', campos: [{ key: 'Setor Origem', label: 'Setor Origem', type: 'text' }, { key: 'Setor Destino', label: 'Setor Destino', type: 'text' },{ key: 'Horário Destino', label: 'Horário Destino', type: 'text' }, { key: 'observacoes', label: 'Observações', type: 'textarea' }] },
+  { id: 'movimentação-horário', titulo: 'Movimentação de Horário', categoria: 'Operacional', icon: '⏰', cor: 'orange', descricao: 'Autorização e registro de movimentação de horário.', campos: [{ key: 'Horário Origem', label: 'Horário Origem', type: 'text' }, { key: 'Horário Destino', label: 'Horário Destino', type: 'text' }, { key: 'observacoes', label: 'Observações', type: 'textarea' }] },
   { id: 'uniforme', titulo: 'Uniforme', categoria: 'RH', icon: '👕', cor: 'cyan', descricao: 'Solicitação de uniforme.', campos: [{ key: 'tamanho', label: 'Tamanho', type: 'select', options: ['PP', 'P', 'M', 'G', 'GG', 'XG'] }, { key: 'observacoes', label: 'Observações', type: 'textarea'}] }
 ];
 
